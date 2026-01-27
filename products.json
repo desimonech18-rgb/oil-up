@@ -362,5 +362,26 @@
     "variant": "Granatapfel",
     "size": "750 ml",
     "price": 13.0
+  },
+  {
+    "id": "KRAEUTERSALZ",
+    "name": "Kraeutersalz",
+    "variant": null,
+    "size": null,
+    "price": 5.0
+  },
+  {
+    "id": "ORANGENMARMELADE",
+    "name": "Orangenmarmelade",
+    "variant": "Orange",
+    "size": null,
+    "price": 5.0
+  },
+  {
+    "id": "GIFT-GROSS",
+    "name": "Geschenkspackung groß",
+    "variant": "10 Sorten",
+    "size": null,
+    "price": 65.0
   }
 ]
