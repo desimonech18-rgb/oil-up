@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Colline Scan</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- QR Scanner -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  
+</head>
+<body>
+  
+  <header>
+    <h1>Colline Scan</h1>
+    <p class="sub">Scan = +1 im Warenkorb · Abschluss = PDF-Rechnung</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="row">
+        <button id="btnOpenCam">Kamera starten</button>
+        <button id="btnStop" class="secondary" disabled>Kamera stoppen</button>
+        <button id="btnClear" class="danger">Neu</button>
+      </div>
+
+      <div id="readerWrap">
+        <div id="reader" width="600px"></div>
+      </div>
+
+      <div id="status" class="status"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Warenkorb</h2>
+      <div id="cart"></div>
+
+      <div class="miniRow">
+        <div class="miniLabel">Zwischensumme</div>
+        <div id="subtotal" class="miniValue">0,00 €</div>
+      </div>
+      <div class="miniRow">
+        <div class="miniLabel">Abzug</div>
+        <div id="discount" class="miniValue">0,00 €</div>
+      </div>
+      <div class="totalRow">
+        <div class="totalLabel">Summe</div>
+        <div id="total" class="totalValue">0,00 €</div>
+      </div>
+
+      <div class="row">
+        <button id="btnDisc" class="secondary" disabled>−10%</button>
+        <button id="btnPdf" class="primary" disabled>PDF-Rechnung erstellen</button>
+        <button id="btnWhats" class="secondary" disabled>WhatsApp-Text kopieren</button>
+      </div>
+
+      <textarea id="receiptText" class="hidden" readonly></textarea>
+    </section>
+  </main>
+
+  <footer>
+    <small></small>
+  </footer>
+
+<script src="./app.js"></script>
+</body>
+</html>

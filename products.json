@@ -1,0 +1,359 @@
+[
+  {
+    "id": "OEL-NATUR-5000",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": null,
+    "size": "5 L",
+    "price": 83.0
+  },
+  {
+    "id": "OEL-NATUR-1000",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": null,
+    "size": "1 L",
+    "price": 17.0
+  },
+  {
+    "id": "OEL-NATUR-750",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": null,
+    "size": "750 ml",
+    "price": 15.0
+  },
+  {
+    "id": "OEL-NATUR-500",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": null,
+    "size": "500 ml",
+    "price": 11.0
+  },
+  {
+    "id": "OEL-NATUR-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": null,
+    "size": "250 ml",
+    "price": 8.0
+  },
+  {
+    "id": "OEL-NATUR-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": null,
+    "size": "100 ml",
+    "price": 4.5
+  },
+  {
+    "id": "OEL-VIEDELLOLIO-750",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Vie dell'olio",
+    "size": "750 ml",
+    "price": 28.0
+  },
+  {
+    "id": "OEL-NOVELLO-500",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Novello",
+    "size": "500 ml",
+    "price": 15.0
+  },
+  {
+    "id": "OEL-ZITRONE-750",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Zitrone",
+    "size": "750 ml",
+    "price": 23.0
+  },
+  {
+    "id": "OEL-ZITRONE-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Zitrone",
+    "size": "250 ml",
+    "price": 11.0
+  },
+  {
+    "id": "OEL-ZITRONE-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Zitrone",
+    "size": "100 ml",
+    "price": 5.0
+  },
+  {
+    "id": "OEL-MANDARINE-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Mandarine",
+    "size": "250 ml",
+    "price": 11.0
+  },
+  {
+    "id": "OEL-MANDARINE-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Mandarine",
+    "size": "100 ml",
+    "price": 5.0
+  },
+  {
+    "id": "OEL-BERGAMOTTE-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Bergamotte",
+    "size": "250 ml",
+    "price": 11.0
+  },
+  {
+    "id": "OEL-BERGAMOTTE-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Bergamotte",
+    "size": "100 ml",
+    "price": 5.0
+  },
+  {
+    "id": "OEL-CHILI-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Chili",
+    "size": "250 ml",
+    "price": 11.0
+  },
+  {
+    "id": "OEL-CHILI-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Chili",
+    "size": "100 ml",
+    "price": 5.0
+  },
+  {
+    "id": "OEL-KNOBLAUCH-CHILI-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Knoblauch & Chili",
+    "size": "250 ml",
+    "price": 11.0
+  },
+  {
+    "id": "OEL-KNOBLAUCH-CHILI-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Knoblauch & Chili",
+    "size": "100 ml",
+    "price": 5.0
+  },
+  {
+    "id": "OEL-ROSMARIN-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Rosmarin",
+    "size": "250 ml",
+    "price": 11.0
+  },
+  {
+    "id": "OEL-ROSMARIN-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Rosmarin",
+    "size": "100 ml",
+    "price": 5.0
+  },
+  {
+    "id": "OEL-OREGANO-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Oregano",
+    "size": "250 ml",
+    "price": 11.0
+  },
+  {
+    "id": "OEL-OREGANO-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Oregano",
+    "size": "100 ml",
+    "price": 5.0
+  },
+  {
+    "id": "OEL-BASILIKUM-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Basilikum",
+    "size": "250 ml",
+    "price": 11.0
+  },
+  {
+    "id": "OEL-BASILIKUM-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Basilikum",
+    "size": "100 ml",
+    "price": 5.0
+  },
+  {
+    "id": "OEL-SCHWARZER-TRUEFFEL-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Schwarzer Trüffel",
+    "size": "250 ml",
+    "price": 16.0
+  },
+  {
+    "id": "OEL-SCHWARZER-TRUEFFEL-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Schwarzer Trüffel",
+    "size": "100 ml",
+    "price": 8.0
+  },
+  {
+    "id": "OEL-WEISSER-TRUEFFEL-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Weisser Trüffel",
+    "size": "250 ml",
+    "price": 22.0
+  },
+  {
+    "id": "OEL-WEISSER-TRUEFFEL-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Weisser Trüffel",
+    "size": "100 ml",
+    "price": 11.0
+  },
+  {
+    "id": "OEL-SAFRAN-250",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Safran",
+    "size": "250 ml",
+    "price": 20.0
+  },
+  {
+    "id": "OEL-SAFRAN-100",
+    "name": "Bio Olivenöl Extravergine",
+    "variant": "Safran",
+    "size": "100 ml",
+    "price": 10.0
+  },
+  {
+    "id": "GIFT-A",
+    "name": "Geschenkspackung",
+    "variant": "5 Sorten",
+    "size": null,
+    "price": 25.0
+  },
+  {
+    "id": "GIFT-B",
+    "name": "Geschenkspackung",
+    "variant": "5 Sorten",
+    "size": null,
+    "price": 25.0
+  },
+  {
+    "id": "GIFT-C",
+    "name": "Geschenkspackung",
+    "variant": "3 Sorten",
+    "size": null,
+    "price": 15.5
+  },
+  {
+    "id": "GIFT-D",
+    "name": "Geschenkspackung",
+    "variant": "2 Sorten",
+    "size": null,
+    "price": 11.0
+  },
+  {
+    "id": "GIFT-E",
+    "name": "Geschenkspackung",
+    "variant": "3 Sorten",
+    "size": null,
+    "price": 30.0
+  },
+  {
+    "id": "GIFT-F",
+    "name": "Geschenkspackung",
+    "variant": "2 Sorten",
+    "size": null,
+    "price": 20.0
+  },
+  {
+    "id": "GIFT-G",
+    "name": "Geschenkspackung",
+    "variant": "2 Sorten",
+    "size": null,
+    "price": 14.0
+  },
+  {
+    "id": "BALS-SILVER6-250",
+    "name": "Bio Balsamico di Modena",
+    "variant": "Silver 6 Jahre",
+    "size": "250 ml",
+    "price": 20.0
+  },
+  {
+    "id": "BALS-SILVER6-100",
+    "name": "Bio Balsamico di Modena",
+    "variant": "Silver 6 Jahre",
+    "size": "100 ml",
+    "price": 10.0
+  },
+  {
+    "id": "BALS-GOLD10-250",
+    "name": "Bio Balsamico di Modena",
+    "variant": "Gold 10 Jahre",
+    "size": "250 ml",
+    "price": 29.0
+  },
+  {
+    "id": "BALS-GOLD10-100",
+    "name": "Bio Balsamico di Modena",
+    "variant": "Gold 10 Jahre",
+    "size": "100 ml",
+    "price": 16.0
+  },
+  {
+    "id": "BALS-WEISS-250",
+    "name": "Bio Balsamico di Modena",
+    "variant": "Weiss",
+    "size": "250 ml",
+    "price": 10.0
+  },
+  {
+    "id": "BALS-WEISS-500",
+    "name": "Bio Balsamico di Modena",
+    "variant": "Weiss",
+    "size": "500 ml",
+    "price": 16.0
+  },
+  {
+    "id": "BALS-CREMA-250",
+    "name": "Bio Balsamico di Modena",
+    "variant": "Balsam Crema",
+    "size": "250 ml",
+    "price": 11.0
+  },
+  {
+    "id": "BALS-SABA-250",
+    "name": "Bio Balsamico di Modena",
+    "variant": "Most (Saba)",
+    "size": "250 ml",
+    "price": 11.0
+  },
+  {
+    "id": "BALS-SABA-500",
+    "name": "Bio Balsamico di Modena",
+    "variant": "Most (Saba)",
+    "size": "500 ml",
+    "price": 17.0
+  },
+  {
+    "id": "BALS-EXTRA25-100",
+    "name": "Bio Balsamico di Modena",
+    "variant": "Extra 25 Jahre",
+    "size": "100 ml",
+    "price": 95.0
+  },
+  {
+    "id": "NEKTAR-BERGAMOTTO-750",
+    "name": "Nektar",
+    "variant": "Bergamotto",
+    "size": "750 ml",
+    "price": 9.0
+  },
+  {
+    "id": "NEKTAR-BERGAMOTTO-3000",
+    "name": "Nektar",
+    "variant": "Bergamotto",
+    "size": "3 L",
+    "price": 25.0
+  },
+  {
+    "id": "NEKTAR-GRANATAPFEL-750",
+    "name": "Nektar",
+    "variant": "Granatapfel",
+    "size": "750 ml",
+    "price": 12.0
+  }
+]
