@@ -340,20 +340,27 @@
     "name": "Nektar",
     "variant": "Bergamotto",
     "size": "750 ml",
-    "price": 9.0
+    "price": 10.0
   },
   {
     "id": "NEKTAR-BERGAMOTTO-3000",
     "name": "Nektar",
     "variant": "Bergamotto",
     "size": "3 L",
-    "price": 25.0
+    "price": 27.0
+  },
+  {
+    "id": "NEKTAR-BERGA100-3000",
+    "name": "Nektar",
+    "variant": "Berga-nektar 100%",
+    "size": "3 L",
+    "price": 35.0
   },
   {
     "id": "NEKTAR-GRANATAPFEL-750",
     "name": "Nektar",
     "variant": "Granatapfel",
     "size": "750 ml",
-    "price": 12.0
+    "price": 13.0
   }
 ]
