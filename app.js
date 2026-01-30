@@ -1,5 +1,6 @@
 // Colline Scan – simple local web app
 let productsById= {};
+let products = []
 let cart = {}; // id -> {product, qty}
 let discountRate = 0; // 0 or 0.10
 
@@ -7,7 +8,6 @@ const statusEl = document.getElementById("status");
 const cartEl = document.getElementById("cart");
 const totalEl = document.getElementById("total");
 const btnOpenCam = document.getElementById("btnOpenCam");
-const btnStop = document.getElementById("btnStop");
 const btnClear = document.getElementById("btnClear");
 const btnPdf = document.getElementById("btnPdf");
 const btnWhats = document.getElementById("btnWhats");
@@ -41,9 +41,9 @@ async function getData() {
 
     result.forEach(element => {
       productsById[element.id] = element
+      listProductsByCategory(element);
     });
 
-    console.log(productsById);
   } catch (error) {
     console.error(error.message);
   }
@@ -133,7 +133,7 @@ function render() {
     const left = document.createElement("div");
     const t = document.createElement("div");
     t.className = "itemTitle";
-    t.textContent = product.name;
+    t.textContent = product.name + " (" + euro(product.price) +")";
     const s = document.createElement("div");
     s.className = "itemSub";
     s.textContent = [product.variant, product.size].filter(Boolean).join(" · ");
@@ -162,9 +162,9 @@ function render() {
     plus.textContent = "+";
     plus.onclick = () => setQty(id, qty + 1);
 
-    controls.appendChild(minus);
-    controls.appendChild(qtyEl);
     controls.appendChild(plus);
+    controls.appendChild(qtyEl);
+    controls.appendChild(minus);
 
     const priceEl = document.createElement("div");
     priceEl.className = "price";
@@ -216,23 +216,27 @@ function startCam() {
 html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 }
 
-async function stopCam() {
-  if (!html5QrcodeScanner) return;
-  try {
-    await html5QrcodeScanner.stop();
-    await html5QrcodeScanner.clear();
-  } catch(e) {}
-  btnStop.disabled = true;
-  btnOpenCam.disabled = false;
-  statusEl.textContent = "Kamera gestoppt.";
+
+function listProductsByCategory(product){
+  let product_name = "("+euro(product.price) +")"
+  if (product.size != null){
+    product_name += " " + product.size
+  }
+  product_name += " " +product.name
+  if (product.variant != null){
+    product_name += " " + product.variant
+  }
+  
+  console.log(product.id)
+  document.getElementById(product.category).innerHTML += `<button onclick="addToCart('${product.id}')">${product_name}</button>`
 }
+
 
 
 // MAIN
 
 
 btnOpenCam.onclick = startCam;
-btnStop.onclick = stopCam;
 btnClear.onclick = () => { cart = {}; discountRate = 0; render(); statusEl.textContent = "Neuer Warenkorb."; };
 
 btnDisc.onclick = () => {

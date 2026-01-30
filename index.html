@@ -14,14 +14,12 @@
   
   <header>
     <h1>Colline Scan</h1>
-    <p class="sub">Scan = +1 im Warenkorb · Abschluss = PDF-Rechnung</p>
   </header>
 
   <main>
     <section class="panel">
       <div class="row">
         <button id="btnOpenCam">Kamera starten</button>
-        <button id="btnStop" class="secondary" disabled>Kamera stoppen</button>
         <button id="btnClear" class="danger">Neu</button>
       </div>
 
@@ -31,6 +29,39 @@
 
       <div id="status" class="status"></div>
     </section>
+
+
+
+    <section class="panel" id="ProductsList">
+      <h2>Produkte</h2>
+      <details>
+        <summary>Öle</summary>
+        <div class="menu" id="oele">
+        </div>
+      </details>
+      <details>
+        <summary>Balsamico / Essig</summary>
+        <div class="menu" id="bals">
+        </div>
+      </details>
+      <details>
+        <summary>Feinkost & Spezialitäten</summary>
+        <div class="menu" id="feinkost">
+        </div>
+      </details>
+      <details>
+        <summary>Bio-Früchte</summary>
+        <div class="menu" id="bio-früchte">
+        </div>
+      </details>
+      <details>
+        <summary>Aktionen / Geschenke</summary>
+        <div class="menu" id="gift">
+        </div>
+      </details>
+    </section>
+
+
 
     <section class="panel">
       <h2>Warenkorb</h2>
@@ -51,7 +82,7 @@
 
       <div class="row">
         <button id="btnDisc" class="secondary" disabled>−10%</button>
-        <button id="btnPdf" class="primary" disabled>PDF-Rechnung erstellen</button>
+        <button id="btnPdf" class="primary" disabled>PDF-Lieferschein erstellen</button>
         <button id="btnWhats" class="secondary" disabled>WhatsApp-Text kopieren</button>
       </div>
 
