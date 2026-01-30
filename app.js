@@ -26,6 +26,10 @@ const btnFreeItem = document.getElementById("btnFreeItem");
 const divCart = document.getElementById("divCart");
 const divDiscounts = document.getElementById("divDiscounts");
 
+const customername = document.getElementById("customername");
+const customernumber = document.getElementById("customernumber");
+const customeraddress = document.getElementById("customeraddress");
+const companyid = document.getElementById("companyid");
 
 btnOpenCam.onclick = startCam;
 
@@ -34,6 +38,10 @@ btnClearCart.onclick = () =>{
     discounts = {};
     global_discount = 0;
     lblReciptText.classList.add("hidden");
+    customername.value = "";
+    customernumber.value = "";
+    customeraddress.value = "";
+    companyid.value = "";
     renderCart();
 }
 
@@ -113,7 +121,9 @@ function chCartQty(productId, changeValue){
     if (!cart[productId]) return;
     cart[productId].qty += changeValue;
     if (cart[productId].qty === 0){ delete cart[productId];delete discounts[productId];}
-    else if(cart[productId].qty < discounts[productId].qty) discounts[productId].qty = cart[productId].qty;
+    if(discounts[productId]){
+        if(cart[productId].qty < discounts[productId].qty) discounts[productId].qty = cart[productId].qty;
+    }
     renderCart();
 }
 
@@ -122,7 +132,9 @@ function chDiscountQty(productId, changeValue){
     discounts[productId].qty += changeValue;
     if (discounts[productId].qty === 0) delete discounts[productId];
 
-    else if(cart[productId].qty < discounts[productId].qty) cart[productId].qty = discounts[productId].qty;
+    if(cart[productId]){
+        if(cart[productId].qty < discounts[productId].qty) cart[productId].qty = discounts[productId].qty;
+    }
 
     renderCart();
 }
@@ -191,39 +203,46 @@ function total(){
 }
 
 function buildReceiptText() {
-  let lines = [];
-  lines.push("Colline degli Ulivi");
-  lines.push(`Datum: ${nowStamp()}`);
-  lines.push("");
-  lines.push("EINKAUF:")
-  for (const id in cart) {
-    const { product, qty } = cart[id];
-    const title = product.name;
-    const sub = [product.variant, product.size].filter(Boolean).join(" · ");
-    const price = Number(product.price) * qty;
-    const line = `${qty}× (${euro(product.price)})${title}${sub ? " · " + sub : ""} … ${euro(price)}`;
-    lines.push(line);
-  }
-  lines.push("----------------------------------------------------------------");
-  lines.push(`ZWISCHENSUMME: ${euro(subtotal())}`);
-  lines.push("");
-  if (discountAmount() > 0) {
-    lines.push("ABZÜGE:");
-    for (const id in discounts) {
-        const { product, qty, price } = discounts[id];
+    let lines = [];
+    lines.push("Colline degli Ulivi");
+    lines.push(`Datum: ${nowStamp()}`);
+
+    if(customername.value) lines.push(`Name: ${customername.value}`);
+    if(customernumber.value) lines.push(`Nummer: ${customernumber.value}`);
+    if(customeraddress.value) lines.push(`Adresse: ${customeraddress.value}`);
+    if(companyid.value) lines.push(`Firmennummer: ${companyid.value}`);
+
+
+    lines.push("");
+    lines.push("EINKAUF:")
+    for (const id in cart) {
+        const { product, qty } = cart[id];
         const title = product.name;
         const sub = [product.variant, product.size].filter(Boolean).join(" · ");
-        const discount = Number(product.price) * qty * (-1);
-        const line = `${qty}× (${euro(product.price)})${title}${sub ? " · " + sub : ""} … ${euro(discount)}`;
+        const price = Number(product.price) * qty;
+        const line = `${qty}× (${euro(product.price)})${title}${sub ? " · " + sub : ""} … ${euro(price)}`;
         lines.push(line);
-    }   
-        lines.push("");
-        lines.push(`Abzug: -${euro(discountAmount())}`);
-  }
-  lines.push(`SUMME: ${euro(total())}`);
-  lines.push("");
-  lines.push("Vielen Dank für Ihren Einkauf!");
-  return lines.join("\n");
+    }
+    lines.push("----------------------------------------------------------------");
+    lines.push(`ZWISCHENSUMME: ${euro(subtotal())}`);
+    lines.push("");
+    if (discountAmount() > 0) {
+        lines.push("ABZÜGE:");
+        for (const id in discounts) {
+            const { product, qty, price } = discounts[id];
+            const title = product.name;
+            const sub = [product.variant, product.size].filter(Boolean).join(" · ");
+            const discount = Number(product.price) * qty * (-1);
+            const line = `${qty}× (${euro(product.price)})${title}${sub ? " · " + sub : ""} … ${euro(discount)}`;
+            lines.push(line);
+        }   
+            lines.push("");
+            lines.push(`Abzug: -${euro(discountAmount())}`);
+    }
+    lines.push(`SUMME: ${euro(total())}`);
+    lines.push("");
+    lines.push("Vielen Dank für Ihren Einkauf!");
+    return lines.join("\n");
 }
 
 
