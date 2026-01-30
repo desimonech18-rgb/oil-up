@@ -1,24 +1,103 @@
-// Colline Scan – simple local web app
+/**
+ * Projectname:            Oil-UP
+ * Description:            An Application for writing checks and documenting outgoing products
+ * Created:                30.01.2026             
+ * Author:                 Breburda Dejan (https://github.com/Breburda-Dejan)
+ * 
+ * 
+ * Arbeitszeiten:
+ * 30.01.2026: 16:08 - 
+ * 
+ * 
+ * 
+ * 
+ */ 
+
+const lblTotal = document.getElementById("lblTotal");
+const lblSubTotal = document.getElementById("lblSubTotal");
+const lblDiscount = document.getElementById("lblDiscount");
+const lblReciptText = document.getElementById("lblReciptText")
+const btnOpenCam = document.getElementById("btnOpenCam");
+const btnClearCart = document.getElementById("btnClearCart");
+const btnDiscount = document.getElementById("btnDiscount");
+const btnPDF = document.getElementById("btnPDF");
+const btnWhatsapp = document.getElementById("btnWhatsapp");
+const btnFreeItem = document.getElementById("btnFreeItem");
+const divCart = document.getElementById("divCart");
+const divDiscounts = document.getElementById("divDiscounts");
+
+
+btnOpenCam.onclick = startCam;
+
+btnClearCart.onclick = () =>{
+    cart = {};
+    discounts = {};
+    global_discount = 0;
+    lblReciptText.classList.add("hidden");
+    renderCart();
+}
+
+btnDiscount.onclick = () => {
+  global_discount = global_discount > 0 ? 0 : 0.10;
+  renderCart();
+};
+
+btnWhatsapp.onclick = async () => {
+  const text = buildReceiptText();
+  lblReciptText.classList.remove("hidden");
+  lblReciptText.value = text;
+  lblReciptText.select();
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+  }
+};
+
+btnPDF.onclick = () => {
+  const text = buildReceiptText();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+
+  const margin = 48;
+  const maxWidth = 595 - margin * 2;
+  const lines = doc.splitTextToSize(text, maxWidth);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.text(lines, margin, 72);
+
+  const fileName = `Colline_Rechnung_${new Date().toISOString().slice(0, 10)}.pdf`;
+  doc.save(fileName);
+};
+
+btnFreeItem.onclick = () => {
+    addToDiscount(lastAddedProduct.id);
+}
+
 
 let productsById = {};
-let products = [];
-let cart = {}; 
-// id -> { product, qty, discountRate }
-let discountRate = 0; // global 10% discount
+let cart = {};
+let discounts = {};
+let lastAddedProduct = null;
+let global_discount = 0;
 
-const statusEl = document.getElementById("status");
-const cartEl = document.getElementById("cart");
-const totalEl = document.getElementById("total");
-const btnOpenCam = document.getElementById("btnOpenCam");
-const btnClear = document.getElementById("btnClear");
-const btnPdf = document.getElementById("btnPdf");
-const btnWhats = document.getElementById("btnWhats");
-const btnDisc = document.getElementById("btnDisc10ges");
-const subtotalEl = document.getElementById("subtotal");
-const discountEl = document.getElementById("discount");
-const receiptTextEl = document.getElementById("receiptText");
 
-statusEl.innerHTML = "Bereit!";
+async function getProducts(){
+    const url = "./products.json";
+    try {
+        const response =await fetch(url);
+        if (!response.ok) throw new Error(`Response status: ${response.status}`);
+        const result =await response.json();
+
+        result.forEach(product => {
+            productsById[product.id] = product;
+            listProductsByCategory(product);
+        });
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
 
 function euro(n) {
   return n.toFixed(2).replace(".", ",") + " €";
@@ -30,185 +109,259 @@ function nowStamp() {
   return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()} – ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-async function getData() {
-  const url = "./products.json";
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Response status: ${response.status}`);
-    const result = await response.json();
-
-    result.forEach(p => {
-      productsById[p.id] = p;
-      listProductsByCategory(p);
-    });
-  } catch (error) {
-    console.error(error.message);
-  }
+function chCartQty(productId, changeValue){
+    if (!cart[productId]) return;
+    cart[productId].qty += changeValue;
+    if (cart[productId].qty === 0){ delete cart[productId];delete discounts[productId];}
+    else if(cart[productId].qty < discounts[productId].qty) discounts[productId].qty = cart[productId].qty;
+    renderCart();
 }
 
+function chDiscountQty(productId, changeValue){
+    if (!discounts[productId]) return;
+    discounts[productId].qty += changeValue;
+    if (discounts[productId].qty === 0) delete discounts[productId];
+
+    else if(cart[productId].qty < discounts[productId].qty) cart[productId].qty = discounts[productId].qty;
+
+    renderCart();
+}
+
+
 function addToCart(productId, qty = 1) {
-  const p = productsById[productId];
-  if (!p) {
-    statusEl.textContent = `Unbekannter Code: ${productId}`;
+  const product = productsById[productId];
+  if (!product) {
     return;
   }
 
   if (!cart[productId]) {
     cart[productId] = {
-      product: p,
-      qty: 0,
-      discountRate: 0
+      product: product,
+      qty: 0
     };
   }
 
   cart[productId].qty += qty;
-
-  statusEl.textContent = `+1: ${p.name}${p.variant ? " · " + p.variant : ""}${p.size ? " · " + p.size : ""}`;
-  render();
+  lastAddedProduct = product;
+  renderCart();
 }
 
-function setQty(productId, newQty) {
-  if (!cart[productId]) return;
-  cart[productId].qty = Math.max(0, newQty);
-  if (cart[productId].qty === 0) delete cart[productId];
-  render();
+
+function addToDiscount(productId, qty = 1){
+    const product = productsById[productId];
+    if (!product) {
+        return;
+    }
+
+    if (!discounts[productId]) {
+        discounts[productId] = {
+            product: product,
+            qty: 0,
+            price: product.price
+        };
+    }
+    discounts[productId].qty += qty;
+    renderCart();
 }
 
-function subtotal() {
-  let t = 0;
-  for (const id in cart) {
-    const { product, qty } = cart[id];
-    t += Number(product.price) * qty;
-  }
-  return t;
+
+function subtotal(){
+    let subtotal = 0;
+    for (const id in cart){
+        const {product,qty} = cart[id];
+        subtotal += Number(product.price)*qty
+    }
+    return subtotal;
 }
 
-function discountAmount() {
-  let d = 0;
 
-  // global discount
-  d += subtotal() * discountRate;
+function discountAmount(){
+    let discount = subtotal() *global_discount;
 
-  // per-item discounts (e.g. 100%)
-  for (const id in cart) {
-    const { product, qty, discountRate: dr } = cart[id];
-    d += Number(product.price) * qty * dr;
-  }
+    for(const id in discounts){
+        const {product,qty,price} = discounts[id];
+        discount += price*qty;
+    }
 
-  return Math.round(d * 100) / 100;
+    return Math.round(discount * 100)/100;
 }
 
-function total() {
-  return Math.round((subtotal() - discountAmount()) * 100) / 100;
+function total(){
+    return Math.round((subtotal() - discountAmount()) * 100) / 100;
 }
 
 function buildReceiptText() {
-  const lines = [];
+  let lines = [];
   lines.push("Colline degli Ulivi");
   lines.push(`Datum: ${nowStamp()}`);
   lines.push("");
-
-  const ids = Object.keys(cart).sort();
-  for (const id of ids) {
-    const { product, qty, discountRate } = cart[id];
+  lines.push("EINKAUF:")
+  for (const id in cart) {
+    const { product, qty } = cart[id];
     const title = product.name;
     const sub = [product.variant, product.size].filter(Boolean).join(" · ");
-    const price = Number(product.price) * qty * (1 - discountRate);
+    const price = Number(product.price) * qty;
     const line = `${qty}× (${euro(product.price)})${title}${sub ? " · " + sub : ""} … ${euro(price)}`;
     lines.push(line);
   }
-
+  lines.push("----------------------------------------------------------------");
+  lines.push(`ZWISCHENSUMME: ${euro(subtotal())}`);
   lines.push("");
   if (discountAmount() > 0) {
-    lines.push(`Abzug: −${euro(discountAmount())}`);
+    lines.push("ABZÜGE:");
+    for (const id in discounts) {
+        const { product, qty, price } = discounts[id];
+        const title = product.name;
+        const sub = [product.variant, product.size].filter(Boolean).join(" · ");
+        const discount = Number(product.price) * qty * (-1);
+        const line = `${qty}× (${euro(product.price)})${title}${sub ? " · " + sub : ""} … ${euro(discount)}`;
+        lines.push(line);
+    }   
+        lines.push("");
+        lines.push(`Abzug: -${euro(discountAmount())}`);
   }
   lines.push(`SUMME: ${euro(total())}`);
-  lines.push("Danke!");
+  lines.push("");
+  lines.push("Vielen Dank für Ihren Einkauf!");
   return lines.join("\n");
 }
 
-function render() {
-  const ids = Object.keys(cart).sort();
-  cartEl.innerHTML = "";
 
-  if (ids.length === 0) {
-    cartEl.innerHTML = "<p style='color:#666;margin:0'>Noch nix gescannt…</p>";
-    subtotalEl.textContent = euro(0);
-    discountEl.textContent = euro(0);
-    totalEl.textContent = euro(0);
-    btnPdf.disabled = true;
-    btnWhats.disabled = true;
-    btnDisc.disabled = true;
-    btnDisc.classList.remove("toggleOn");
-    return;
-  }
+function renderCart(){
+    divCart.innerHTML = "";
+    divDiscounts.innerHTML = "";
 
-  for (const id of ids) {
-    const { product, qty, discountRate } = cart[id];
-    const row = document.createElement("div");
-    row.className = "item";
+    if (Object.keys(cart).length === 0) {
+        divCart.innerHTML = "<p style='color:#666;margin:0'></p>";
+        lblSubTotal.textContent = euro(0);
+        lblDiscount.textContent = euro(0);
+        lblTotal.textContent = euro(0);
+        btnPDF.disabled = true;
+        btnWhatsapp.disabled = true;
+        btnDiscount.disabled = true;
+        btnFreeItem.disabled = true;
+        btnDiscount.classList.remove("toggleOn");
+        return;
+    }
 
-    const left = document.createElement("div");
-    const t = document.createElement("div");
-    t.className = "itemTitle";
-    t.textContent = product.name + (discountRate === 1 ? " (GRATIS)" : "");
-    const s = document.createElement("div");
-    s.className = "itemSub";
-    s.textContent = [product.variant, product.size].filter(Boolean).join(" · ");
-    left.appendChild(t);
-    if (s.textContent) left.appendChild(s);
+    for (const id in cart) {
+        const { product, qty, discountRate } = cart[id];
+        const row = document.createElement("div");
+        row.className = "item";
 
-    const right = document.createElement("div");
-    right.style.display = "flex";
-    right.style.gap = "10px";
-    right.style.alignItems = "center";
+        const left = document.createElement("div");
+        const title = document.createElement("div");
+        title.className = "itemTitle";
+        title.textContent = product.name;
+        const variant = document.createElement("div");
+        variant.className = "itemSub";
+        variant.textContent = [product.variant, product.size].filter(Boolean).join(" · ");
+        left.appendChild(title);
+        if (variant.textContent) left.appendChild(variant);
 
-    const controls = document.createElement("div");
-    controls.className = "qtyControls";
+        const right = document.createElement("div");
+        right.style.display = "flex";
+        right.style.gap = "10px";
+        right.style.alignItems = "center";
 
-    const minus = document.createElement("button");
-    minus.className = "qtyBtn";
-    minus.textContent = "–";
-    minus.onclick = () => setQty(id, qty - 1);
+        const controls = document.createElement("div");
+        controls.className = "qtyControls";
 
-    const qtyEl = document.createElement("div");
-    qtyEl.className = "qty";
-    qtyEl.textContent = String(qty);
+        const minus = document.createElement("button");
+        minus.className = "qtyBtn";
+        minus.textContent = "–";
+        minus.onclick = () => chCartQty(id, -1);
 
-    const plus = document.createElement("button");
-    plus.className = "qtyBtn";
-    plus.textContent = "+";
-    plus.onclick = () => setQty(id, qty + 1);
+        const qtyEl = document.createElement("div");
+        qtyEl.className = "qty";
+        qtyEl.textContent = String(qty);
 
-    controls.appendChild(plus);
-    controls.appendChild(qtyEl);
-    controls.appendChild(minus);
+        const plus = document.createElement("button");
+        plus.className = "qtyBtn";
+        plus.textContent = "+";
+        plus.onclick = () => chCartQty(id, 1);
 
-    const priceEl = document.createElement("div");
-    priceEl.className = "price";
-    const price = Number(product.price) * qty * (1 - discountRate);
-    priceEl.textContent = euro(price);
+        controls.appendChild(plus);
+        controls.appendChild(qtyEl);
+        controls.appendChild(minus);
 
-    right.appendChild(controls);
-    right.appendChild(priceEl);
+        const priceEl = document.createElement("div");
+        priceEl.className = "price";
+        const price = Number(product.price) * qty * (1 - global_discount);
+        priceEl.textContent = euro(price);
 
-    row.appendChild(left);
-    row.appendChild(right);
-    cartEl.appendChild(row);
-  }
+        right.appendChild(controls);
+        right.appendChild(priceEl);
 
-  subtotalEl.textContent = euro(subtotal());
-  discountEl.textContent = euro(discountAmount());
-  totalEl.textContent = euro(total());
+        row.appendChild(left);
+        row.appendChild(right);
+        divCart.appendChild(row);
+    }
+    lblSubTotal.textContent = euro(subtotal());
+    for (const id in discounts) {
+        const { product, qty} = discounts[id];
+        const row = document.createElement("div");
+        row.className = "item";
 
-  btnPdf.disabled = false;
-  btnWhats.disabled = false;
-  btnDisc.disabled = false;
+        const left = document.createElement("div");
+        const title = document.createElement("div");
+        title.className = "itemTitle";
+        title.textContent = product.name;
+        const variant = document.createElement("div");
+        variant.className = "itemSub";
+        variant.textContent = [product.variant, product.size].filter(Boolean).join(" · ");
+        left.appendChild(title);
+        if (variant.textContent) left.appendChild(variant);
 
-  if (discountRate > 0) btnDisc.classList.add("toggleOn");
-  else btnDisc.classList.remove("toggleOn");
+        const right = document.createElement("div");
+        right.style.display = "flex";
+        right.style.gap = "10px";
+        right.style.alignItems = "center";
 
-  receiptTextEl.value = buildReceiptText();
+        const controls = document.createElement("div");
+        controls.className = "qtyControls";
+
+        const minus = document.createElement("button");
+        minus.className = "qtyBtn";
+        minus.textContent = "–";
+        minus.onclick = () => chDiscountQty(id, -1);
+
+        const qtyEl = document.createElement("div");
+        qtyEl.className = "qty";
+        qtyEl.textContent = String(qty);
+
+        const plus = document.createElement("button");
+        plus.className = "qtyBtn";
+        plus.textContent = "+";
+        plus.onclick = () => chDiscountQty(id, 1);
+
+        controls.appendChild(plus);
+        controls.appendChild(qtyEl);
+        controls.appendChild(minus);
+
+        const priceEl = document.createElement("div");
+        priceEl.className = "price";
+        priceEl.textContent = euro(Number(product.price) * qty * -1);
+
+        right.appendChild(controls);
+        right.appendChild(priceEl);
+
+        row.appendChild(left);
+        row.appendChild(right);
+        divDiscounts.appendChild(row);
+    }
+    lblDiscount.textContent = euro(discountAmount());
+    lblTotal.textContent = euro(total());
+
+    btnPDF.disabled = false;
+    btnWhatsapp.disabled = false;
+    btnDiscount.disabled = false;
+    btnFreeItem.disabled = false;
+
+    if (global_discount > 0) btnDiscount.classList.add("toggleOn");
+    else btnDiscount.classList.remove("toggleOn");
+
+    lblReciptText.value = buildReceiptText();
 }
 
 let html5QrcodeScanner;
@@ -242,52 +395,4 @@ function listProductsByCategory(product) {
     `<button onclick="addToCart('${product.id}')">${label}</button>`;
 }
 
-// BUTTONS
-
-btnOpenCam.onclick = startCam;
-
-btnClear.onclick = () => {
-  cart = {};
-  discountRate = 0;
-  render();
-  statusEl.textContent = "Neuer Warenkorb.";
-};
-
-btnDisc.onclick = () => {
-  discountRate = discountRate > 0 ? 0 : 0.10;
-  statusEl.textContent = discountRate > 0 ? "10% Abzug aktiv." : "Abzug aus.";
-  render();
-};
-
-btnWhats.onclick = async () => {
-  const text = buildReceiptText();
-  receiptTextEl.classList.remove("hidden");
-  receiptTextEl.value = text;
-  receiptTextEl.select();
-  try {
-    await navigator.clipboard.writeText(text);
-    statusEl.textContent = "WhatsApp-Text kopiert.";
-  } catch {
-    statusEl.textContent = "Text markiert – bitte manuell kopieren.";
-  }
-};
-
-btnPdf.onclick = () => {
-  const text = buildReceiptText();
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit: "pt", format: "a4" });
-
-  const margin = 48;
-  const maxWidth = 595 - margin * 2;
-  const lines = doc.splitTextToSize(text, maxWidth);
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-  doc.text(lines, margin, 72);
-
-  const fileName = `Colline_Rechnung_${new Date().toISOString().slice(0, 10)}.pdf`;
-  doc.save(fileName);
-  statusEl.textContent = "PDF erstellt.";
-};
-
-getData();
+getProducts();

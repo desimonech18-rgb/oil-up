@@ -8,90 +8,193 @@
   <!-- QR Scanner -->
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  
 </head>
 <body>
   
   <header>
-    <h1>Colline Scan</h1>
+    <div class="header-content">
+      <div class="logo-section">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <h1>Colline Scan</h1>
+      </div>
+    </div>
   </header>
 
   <main>
-    <section class="panel">
-      <div class="row">
-        <button id="btnOpenCam">Kamera starten</button>
-        <button id="btnClear" class="danger">Neu</button>
+    <section class="panel camera-panel">
+      <div class="panel-header">
+        <h2>Scanner</h2>
       </div>
-
+      <div class="button-row">
+        <button id="btnOpenCam" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          Kamera starten
+        </button>
+        <button id="btnClearCart" class="btn-danger">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+          Neu
+        </button>
+      </div>
       <div id="readerWrap">
-        <div id="reader" width="600px"></div>
+        <div id="reader"></div>
       </div>
-
-      <div id="status" class="status"></div>
     </section>
 
-
-
-    <section class="panel" id="ProductsList">
-      <h2>Produkte</h2>
+    <section class="panel products-panel">
+      <div class="panel-header">
+        <h2>Produkte</h2>
+      </div>
       <details>
-        <summary>Öle</summary>
-        <div class="menu" id="oele">
-        </div>
+        <summary>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          Öle
+        </summary>
+        <div class="menu" id="oele"></div>
       </details>
       <details>
-        <summary>Balsamico / Essig</summary>
-        <div class="menu" id="bals">
-        </div>
+        <summary>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          Balsamico / Essig
+        </summary>
+        <div class="menu" id="bals"></div>
       </details>
       <details>
-        <summary>Feinkost & Spezialitäten</summary>
-        <div class="menu" id="feinkost">
-        </div>
+        <summary>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          Feinkost & Spezialitäten
+        </summary>
+        <div class="menu" id="feinkost"></div>
       </details>
       <details>
-        <summary>Bio-Früchte</summary>
-        <div class="menu" id="bio-früchte">
-        </div>
+        <summary>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/>
+            <path d="M12 2v20M2 12h20"/>
+          </svg>
+          Bio-Früchte
+        </summary>
+        <div class="menu" id="bio-früchte"></div>
       </details>
       <details>
-        <summary>Aktionen / Geschenke</summary>
-        <div class="menu" id="gift">
-        </div>
+        <summary>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 12v10H4V12"/>
+            <path d="M22 7H2l10-5 10 5z"/>
+            <path d="M12 22V7"/>
+          </svg>
+          Aktionen / Geschenke
+        </summary>
+        <div class="menu" id="gift"></div>
       </details>
     </section>
 
-
-
-    <section class="panel">
-      <h2>Warenkorb</h2>
-      <div id="cart"></div>
-
-      <div class="miniRow">
-        <div class="miniLabel">Zwischensumme</div>
-        <div id="subtotal" class="miniValue">0,00 €</div>
+    <section class="panel cart-panel">
+      <div class="panel-header">
+        <h2>Warenkorb</h2>
       </div>
-      <div class="miniRow">
-        <div class="miniLabel">Abzug</div>
-        <div id="discount" class="miniValue">0,00 €</div>
-      </div>
-      <div class="totalRow">
-        <div class="totalLabel">Summe</div>
-        <div id="total" class="totalValue">0,00 €</div>
+      <div id="divCart" class="cart-items"></div>
+      
+      <div class="summary-section">
+        <div class="summary-row">
+          <span class="summary-label">Zwischensumme</span>
+          <span id="lblSubTotal" class="summary-value">0,00 €</span>
+        </div>
+        
+        <div id="divDiscounts" class="discount-items"></div>
+        
+        <div class="summary-row discount-row">
+          <span class="summary-label">Abzug</span>
+          <span id="lblDiscount" class="summary-value">0,00 €</span>
+        </div>
+        
+        <div class="summary-row total-row">
+          <span class="summary-label">Summe</span>
+          <span id="lblTotal" class="summary-value">0,00 €</span>
+        </div>
       </div>
 
-      <div class="row">
-        <button id="btnDisc10ges" class="secondary" disabled>(10%) gesammt</button>
-        <button id="btnPdf" class="primary" disabled>PDF-Lieferschein erstellen</button>
-        <button id="btnWhats" class="secondary" disabled>WhatsApp-Text kopieren</button>
+      <div class="customer-info">
+        <div class="input-grid">
+          <div class="input-group">
+            <label>Name</label>
+            <input id="customername" type="text" placeholder="Kundenname">
+          </div>
+          <div class="input-group">
+            <label>Telefonnummer</label>
+            <input id="customernumber" type="tel" placeholder="+43...">
+          </div>
+          <div class="input-group">
+            <label>Adresse</label>
+            <input id="customeraddress" type="text" placeholder="Straße, PLZ Ort">
+          </div>
+          <div class="input-group">
+            <label>Firmennummer</label>
+            <input id="companyid" type="tel" placeholder="UID/FN">
+          </div>
+        </div>
       </div>
 
-      <textarea id="receiptText" class="hidden" readonly></textarea>
+      <div class="action-buttons">
+        <div class="discount-buttons">
+          <button id="btnDiscount" class="btn-secondary" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="16"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+            10% Rabatt gesamt
+          </button>
+          <button id="btnFreeItem" class="btn-secondary" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 12v10H4V12"/>
+              <path d="M22 7H2l10-5 10 5z"/>
+            </svg>
+            100% letztes Produkt
+          </button>
+        </div>
+        <button id="btnPDF" class="btn-primary btn-large" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          PDF-Lieferschein erstellen
+        </button>
+        <button id="btnWhatsapp" class="btn-whatsapp" disabled>
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+          </svg>
+          WhatsApp-Text kopieren
+        </button>
+      </div>
+
+      <textarea id="lblReciptText" class="hidden" readonly></textarea>
     </section>
   </main>
 
   <footer>
-    <small></small>
+    <small>© 2026 Colline degli Ulivi · Oil-UP System</small>
   </footer>
 
 <script src="./app.js"></script>
