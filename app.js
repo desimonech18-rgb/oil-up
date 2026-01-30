@@ -1,8 +1,10 @@
 // Colline Scan – simple local web app
-let productsById= {};
-let products = []
-let cart = {}; // id -> {product, qty}
-let discountRate = 0; // 0 or 0.10
+
+let productsById = {};
+let products = [];
+let cart = {}; 
+// id -> { product, qty, discountRate }
+let discountRate = 0; // global 10% discount
 
 const statusEl = document.getElementById("status");
 const cartEl = document.getElementById("cart");
@@ -11,57 +13,57 @@ const btnOpenCam = document.getElementById("btnOpenCam");
 const btnClear = document.getElementById("btnClear");
 const btnPdf = document.getElementById("btnPdf");
 const btnWhats = document.getElementById("btnWhats");
-const btnDisc = document.getElementById("btnDisc");
+const btnDisc = document.getElementById("btnDisc10ges");
 const subtotalEl = document.getElementById("subtotal");
 const discountEl = document.getElementById("discount");
 const receiptTextEl = document.getElementById("receiptText");
 
-
-statusEl.innerHTML = "Bereit!"
+statusEl.innerHTML = "Bereit!";
 
 function euro(n) {
-  // n is number
   return n.toFixed(2).replace(".", ",") + " €";
 }
+
 function nowStamp() {
   const d = new Date();
-  const pad = (x)=>String(x).padStart(2,"0");
-  return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} – ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const pad = (x) => String(x).padStart(2, "0");
+  return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()} – ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 async function getData() {
   const url = "./products.json";
   try {
     const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`Response status: ${response.status}`);
     const result = await response.json();
 
-    result.forEach(element => {
-      productsById[element.id] = element
-      listProductsByCategory(element);
+    result.forEach(p => {
+      productsById[p.id] = p;
+      listProductsByCategory(p);
     });
-
   } catch (error) {
     console.error(error.message);
   }
 }
 
-function parseQr(raw) {
-  return raw.replace("COLLINE:", "").trim();
-}
-
-function addToCart(productId, qty=1) {
+function addToCart(productId, qty = 1) {
   const p = productsById[productId];
   if (!p) {
     statusEl.textContent = `Unbekannter Code: ${productId}`;
     return;
   }
-  if (!cart[productId]) cart[productId] = { product: p, qty: 0 };
+
+  if (!cart[productId]) {
+    cart[productId] = {
+      product: p,
+      qty: 0,
+      discountRate: 0
+    };
+  }
+
   cart[productId].qty += qty;
-  statusEl.textContent = `+1: ${p.name}${p.variant ? " · "+p.variant : ""}${p.size ? " · "+p.size : ""}`;
+
+  statusEl.textContent = `+1: ${p.name}${p.variant ? " · " + p.variant : ""}${p.size ? " · " + p.size : ""}`;
   render();
 }
 
@@ -75,14 +77,27 @@ function setQty(productId, newQty) {
 function subtotal() {
   let t = 0;
   for (const id in cart) {
-    const {product, qty} = cart[id];
+    const { product, qty } = cart[id];
     t += Number(product.price) * qty;
   }
   return t;
 }
+
 function discountAmount() {
-  return Math.round(subtotal() * discountRate * 100) / 100;
+  let d = 0;
+
+  // global discount
+  d += subtotal() * discountRate;
+
+  // per-item discounts (e.g. 100%)
+  for (const id in cart) {
+    const { product, qty, discountRate: dr } = cart[id];
+    d += Number(product.price) * qty * dr;
+  }
+
+  return Math.round(d * 100) / 100;
 }
+
 function total() {
   return Math.round((subtotal() - discountAmount()) * 100) / 100;
 }
@@ -92,17 +107,19 @@ function buildReceiptText() {
   lines.push("Colline degli Ulivi");
   lines.push(`Datum: ${nowStamp()}`);
   lines.push("");
-  // stable ordering
+
   const ids = Object.keys(cart).sort();
   for (const id of ids) {
-    const {product, qty} = cart[id];
+    const { product, qty, discountRate } = cart[id];
     const title = product.name;
     const sub = [product.variant, product.size].filter(Boolean).join(" · ");
-    const line = `${qty}× ${title}${sub ? " · "+sub : ""} … ${euro(Number(product.price) * qty)}`;
+    const price = Number(product.price) * qty * (1 - discountRate);
+    const line = `${qty}× (${euro(product.price)})${title}${sub ? " · " + sub : ""} … ${euro(price)}`;
     lines.push(line);
   }
+
   lines.push("");
-  if (discountRate > 0) {
+  if (discountAmount() > 0) {
     lines.push(`Abzug: −${euro(discountAmount())}`);
   }
   lines.push(`SUMME: ${euro(total())}`);
@@ -113,6 +130,7 @@ function buildReceiptText() {
 function render() {
   const ids = Object.keys(cart).sort();
   cartEl.innerHTML = "";
+
   if (ids.length === 0) {
     cartEl.innerHTML = "<p style='color:#666;margin:0'>Noch nix gescannt…</p>";
     subtotalEl.textContent = euro(0);
@@ -121,19 +139,19 @@ function render() {
     btnPdf.disabled = true;
     btnWhats.disabled = true;
     btnDisc.disabled = true;
-    btnDisc.classList.remove('toggleOn');
+    btnDisc.classList.remove("toggleOn");
     return;
   }
 
   for (const id of ids) {
-    const {product, qty} = cart[id];
+    const { product, qty, discountRate } = cart[id];
     const row = document.createElement("div");
     row.className = "item";
 
     const left = document.createElement("div");
     const t = document.createElement("div");
     t.className = "itemTitle";
-    t.textContent = product.name + " (" + euro(product.price) +")";
+    t.textContent = product.name + (discountRate === 1 ? " (GRATIS)" : "");
     const s = document.createElement("div");
     s.className = "itemSub";
     s.textContent = [product.variant, product.size].filter(Boolean).join(" · ");
@@ -168,7 +186,8 @@ function render() {
 
     const priceEl = document.createElement("div");
     priceEl.className = "price";
-    priceEl.textContent = euro(Number(product.price) * qty);
+    const price = Number(product.price) * qty * (1 - discountRate);
+    priceEl.textContent = euro(price);
 
     right.appendChild(controls);
     right.appendChild(priceEl);
@@ -181,79 +200,73 @@ function render() {
   subtotalEl.textContent = euro(subtotal());
   discountEl.textContent = euro(discountAmount());
   totalEl.textContent = euro(total());
+
   btnPdf.disabled = false;
   btnWhats.disabled = false;
   btnDisc.disabled = false;
-  if (discountRate > 0) btnDisc.classList.add('toggleOn'); else btnDisc.classList.remove('toggleOn');
+
+  if (discountRate > 0) btnDisc.classList.add("toggleOn");
+  else btnDisc.classList.remove("toggleOn");
 
   receiptTextEl.value = buildReceiptText();
 }
 
 let html5QrcodeScanner;
-function onScanSuccess(decodedText, decodedResult) {
-  
-  decodedText = decodedText.replace("COLLINE:","")
 
-  //let product = productsById[decodedText]
+function onScanSuccess(decodedText) {
+  decodedText = decodedText.replace("COLLINE:", "");
   addToCart(decodedText);
-
-
-  console.log(`Code matched = ${decodedText}`, decodedResult);
-  html5QrcodeScanner.clear()
+  html5QrcodeScanner.clear();
 }
 
 function onScanFailure(error) {
-  // handle scan failure, usually better to ignore and keep scanning.
-  // for example:
   console.warn(`Code scan error = ${error}`);
 }
 
 function startCam() {
   html5QrcodeScanner = new Html5QrcodeScanner(
-  "reader",
-  { fps: 10, qrbox: {width: 250, height: 250} },
-  /* verbose= */ false);
-html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    "reader",
+    { fps: 10, qrbox: { width: 250, height: 250 } },
+    false
+  );
+  html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 }
 
+function listProductsByCategory(product) {
+  let label = `(${euro(product.price)})`;
+  if (product.size) label += " " + product.size;
+  label += " " + product.name;
+  if (product.variant) label += " " + product.variant;
 
-function listProductsByCategory(product){
-  let product_name = "("+euro(product.price) +")"
-  if (product.size != null){
-    product_name += " " + product.size
-  }
-  product_name += " " +product.name
-  if (product.variant != null){
-    product_name += " " + product.variant
-  }
-  
-  console.log(product.id)
-  document.getElementById(product.category).innerHTML += `<button onclick="addToCart('${product.id}')">${product_name}</button>`
+  document.getElementById(product.category).innerHTML +=
+    `<button onclick="addToCart('${product.id}')">${label}</button>`;
 }
 
-
-
-// MAIN
-
+// BUTTONS
 
 btnOpenCam.onclick = startCam;
-btnClear.onclick = () => { cart = {}; discountRate = 0; render(); statusEl.textContent = "Neuer Warenkorb."; };
+
+btnClear.onclick = () => {
+  cart = {};
+  discountRate = 0;
+  render();
+  statusEl.textContent = "Neuer Warenkorb.";
+};
 
 btnDisc.onclick = () => {
-  discountRate = (discountRate > 0) ? 0 : 0.10;
-  statusEl.textContent = (discountRate > 0) ? "10% Abzug aktiv." : "Abzug aus.";
+  discountRate = discountRate > 0 ? 0 : 0.10;
+  statusEl.textContent = discountRate > 0 ? "10% Abzug aktiv." : "Abzug aus.";
   render();
 };
 
 btnWhats.onclick = async () => {
   const text = buildReceiptText();
-  // show and copy
   receiptTextEl.classList.remove("hidden");
   receiptTextEl.value = text;
   receiptTextEl.select();
   try {
     await navigator.clipboard.writeText(text);
-    statusEl.textContent = "WhatsApp-Text kopiert. Einfach in WhatsApp einfügen.";
+    statusEl.textContent = "WhatsApp-Text kopiert.";
   } catch {
     statusEl.textContent = "Text markiert – bitte manuell kopieren.";
   }
@@ -262,19 +275,19 @@ btnWhats.onclick = async () => {
 btnPdf.onclick = () => {
   const text = buildReceiptText();
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit:"pt", format:"a4" });
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
 
   const margin = 48;
-  const maxWidth = 595 - margin*2; // a4 width in pt
+  const maxWidth = 595 - margin * 2;
   const lines = doc.splitTextToSize(text, maxWidth);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(12);
   doc.text(lines, margin, 72);
 
-  const fileName = `Colline_Rechnung_${new Date().toISOString().slice(0,10)}.pdf`;
+  const fileName = `Colline_Rechnung_${new Date().toISOString().slice(0, 10)}.pdf`;
   doc.save(fileName);
-  statusEl.textContent = "PDF erstellt (Download).";
+  statusEl.textContent = "PDF erstellt.";
 };
 
 getData();
