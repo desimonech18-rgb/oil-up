@@ -414,5 +414,4 @@ function listProductsByCategory(product) {
     `<button onclick="addToCart('${product.id}')">${label}</button>`;
 }
 
-
 getProducts();
