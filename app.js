@@ -6,6 +6,7 @@
  * 
  * 
  * Arbeitszeiten:
+ * 30.01.2026: 4h
  * 30.01.2026: 16:08 - 19:08
  * 
  * 
@@ -413,5 +414,6 @@ function listProductsByCategory(product) {
   document.getElementById(product.category).innerHTML +=
     `<button onclick="addToCart('${product.id}')">${label}</button>`;
 }
+
 
 getProducts();
