@@ -50,7 +50,6 @@ body {
   to { opacity: 1; }
 }
 
-/* Header */
 header {
   background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
   color: white;
@@ -102,7 +101,6 @@ header h1 {
   letter-spacing: -0.5px;
 }
 
-/* Main Layout */
 main {
   max-width: 1400px;
   margin: 2rem auto;
@@ -124,7 +122,6 @@ main {
   }
 }
 
-/* Panels */
 .panel {
   background: var(--color-surface);
   border-radius: var(--radius-lg);
@@ -165,7 +162,6 @@ main {
   gap: 0.5rem;
 }
 
-/* Buttons */
 button {
   border: none;
   cursor: pointer;
@@ -275,7 +271,6 @@ button:disabled {
   50% { transform: scale(1.05); }
 }
 
-/* Button Rows */
 .button-row {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -283,7 +278,6 @@ button:disabled {
   margin-bottom: 1rem;
 }
 
-/* Camera/Reader */
 #readerWrap {
   margin-top: 1rem;
   border-radius: var(--radius-md);
@@ -297,7 +291,6 @@ button:disabled {
   border-radius: var(--radius-md) !important;
 }
 
-/* Products */
 .products-panel details {
   margin-bottom: 1rem;
   border: 1px solid var(--color-border);
@@ -363,7 +356,6 @@ button:disabled {
   box-shadow: var(--shadow-sm);
 }
 
-/* Cart */
 .cart-items {
   min-height: 100px;
   margin-bottom: 1.5rem;
@@ -452,7 +444,6 @@ button:disabled {
   text-align: right;
 }
 
-/* Summary Section */
 .summary-section {
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   border-radius: var(--radius-md);
@@ -517,7 +508,6 @@ button:disabled {
   color: var(--color-danger);
 }
 
-/* Customer Info */
 .customer-info {
   margin-bottom: 1.5rem;
 }
@@ -563,7 +553,6 @@ button:disabled {
   opacity: 0.6;
 }
 
-/* Action Buttons */
 .action-buttons {
   display: grid;
   gap: 0.75rem;
@@ -575,7 +564,6 @@ button:disabled {
   gap: 0.75rem;
 }
 
-/* Footer */
 footer {
   text-align: center;
   padding: 2rem;
@@ -587,12 +575,10 @@ footer small {
   font-size: 0.875rem;
 }
 
-/* Utility */
 .hidden {
   display: none !important;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   header {
     padding: 1rem 1.5rem;
@@ -635,7 +621,6 @@ footer small {
   }
 }
 
-/* Animations on scroll */
 @keyframes fadeInScale {
   from {
     opacity: 0;
@@ -647,7 +632,6 @@ footer small {
   }
 }
 
-/* Loading animation */
 @keyframes shimmer {
   0% {
     background-position: -1000px 0;

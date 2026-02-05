@@ -438,5 +438,61 @@
     "size": null,
     "price": 65.0,
     "category":"gift"
+  },
+  {
+    "id": "FRUIT-BIO-ORANGEN-8KG",
+    "name": "Bio-Orangen",
+    "variant": null,
+    "size": "8kg",
+    "price": 0.0,
+    "category":"fruits"
+  },
+  {
+    "id": "FRUIT-BIO-CLEMENTINEN-8KG",
+    "name": "Bio-Clementinen",
+    "variant": null,
+    "size": "8kg",
+    "price": 0.0,
+    "category":"fruits"
+  },
+  {
+    "id": "FRUIT-BIO-ZITRONEN-8KG",
+    "name": "Bio-Zitronen",
+    "variant": null,
+    "size": "8kg",
+    "price": 0.0,
+    "category":"fruits"
+  },
+  {
+    "id": "FRUIT-BIO-BERGAMOTTE-8KG",
+    "name": "Bio-Bergamotten",
+    "variant": null,
+    "size": "8kg",
+    "price": 0.0,
+    "category":"fruits"
+  },
+  {
+    "id": "KISTE-OEL-1L-12",
+    "name": "12er Kiste Öl",
+    "variant": null,
+    "size": "12*1L",
+    "price": 228.0,
+    "category":"boxes"
+  },
+  {
+    "id": "KISTE-BALS-WEISS-500-6",
+    "name": "6er Kiste Balsamico-Weiss",
+    "variant": null,
+    "size": "12*500ml",
+    "price": 96.0,
+    "category":"boxes"
+  },
+  {
+    "id": "KISTE-OEL-ZITRONE-750-6",
+    "name": "6er Kiste Zitronen-Öl",
+    "variant": null,
+    "size": "6*750ml",
+    "price": 150.0,
+    "category":"boxes"
   }
 ]

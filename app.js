@@ -2,13 +2,13 @@
  * Projectname:            Oil-UP
  * Description:            An Application for writing checks and documenting outgoing products
  * Created:                30.01.2026             
- * Author:                 Breburda Dejan (https://github.com/Breburda-Dejan)
+ * Author:                 Breburda Dejan (https://breburda.at)
  * 
  * 
  * Arbeitszeiten:
  * 30.01.2026: 4h
  * 30.01.2026: 16:08 - 19:08
- * 
+ * 05.02.2026: 19:03 - 21:21
  * 
  * 
  * 
@@ -30,7 +30,8 @@ const divDiscounts = document.getElementById("divDiscounts");
 const customername = document.getElementById("customername");
 const customernumber = document.getElementById("customernumber");
 const customeraddress = document.getElementById("customeraddress");
-const companyid = document.getElementById("companyid");
+const recipt = document.getElementById("reciptid");
+const info = document.getElementById("info");
 
 btnOpenCam.onclick = startCam;
 
@@ -42,7 +43,8 @@ btnClearCart.onclick = () =>{
     customername.value = "";
     customernumber.value = "";
     customeraddress.value = "";
-    companyid.value = "";
+    recipt.value = "";
+    info.value = "";
     renderCart();
 }
 
@@ -205,13 +207,14 @@ function total(){
 
 function buildReceiptText() {
     let lines = [];
-    lines.push("Colline degli Ulivi");
+    lines.push("Lieferschein");
     lines.push(`Datum: ${nowStamp()}`);
 
     if(customername.value) lines.push(`Name: ${customername.value}`);
     if(customernumber.value) lines.push(`Nummer: ${customernumber.value}`);
     if(customeraddress.value) lines.push(`Adresse: ${customeraddress.value}`);
-    if(companyid.value) lines.push(`Firmennummer: ${companyid.value}`);
+    if(recipt.value) lines.push(`Rechnungsnummer: ${recipt.value}`);
+    if(info.value) lines.push(`Informationen: \n"${info.value}"`);
 
 
     lines.push("");
@@ -241,8 +244,6 @@ function buildReceiptText() {
             lines.push(`Abzug: -${euro(discountAmount())}`);
     }
     lines.push(`SUMME: ${euro(total())}`);
-    lines.push("");
-    lines.push("Vielen Dank für Ihren Einkauf!");
     return lines.join("\n");
 }
 

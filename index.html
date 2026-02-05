@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Scanner - Colline degli Ulivi</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- QR Scanner -->
   <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
@@ -14,7 +13,6 @@
   <header>
     <div class="header-content">
       <div class="logo-section">
-        <!-- <img src="https://www.colline-d-ulivi.com/wp-content/uploads/2021/09/Logo.png" alt="Logo" width="95" height="98" onclick="document.location.href='https://www.colline-d-ulivi.com/'"> -->
         <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
           <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
@@ -54,59 +52,96 @@
       <div class="panel-header">
         <h2>Produkte</h2>
       </div>
-      <details>
-        <summary>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-          Öle
-        </summary>
-        <div class="menu" id="oele"></div>
-      </details>
-      <details>
-        <summary>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-          Balsamico / Essig
-        </summary>
-        <div class="menu" id="bals"></div>
-      </details>
-      <details>
-        <summary>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="9" cy="21" r="1"/>
-            <circle cx="20" cy="21" r="1"/>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-          </svg>
-          Feinkost & Spezialitäten
-        </summary>
-        <div class="menu" id="feinkost"></div>
-      </details>
-      <details>
-        <summary>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/>
-            <path d="M12 2v20M2 12h20"/>
-          </svg>
-          Bio-Früchte
-        </summary>
-        <div class="menu" id="bio-früchte"></div>
-      </details>
-      <details>
-        <summary>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 12v10H4V12"/>
-            <path d="M22 7H2l10-5 10 5z"/>
-            <path d="M12 22V7"/>
-          </svg>
-          Aktionen / Geschenke
-        </summary>
-        <div class="menu" id="gift"></div>
-      </details>
+     <details>
+      <summary>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 4 L9 3 L15 3 L15 4" stroke-width="1.5"/>
+          <rect x="10" y="4" width="4" height="2" rx="0.5"/>
+          <path d="M9.5 6 L9 8 L9 18 C9 19 10 20 12 20 C14 20 15 19 15 18 L15 8 L14.5 6 Z"/>
+          <ellipse cx="12" cy="12" rx="2" ry="3" fill="currentColor" opacity="0.2"/>
+          <circle cx="11" cy="10" r="0.5" fill="currentColor" opacity="0.4"/>
+        </svg>
+        Öle
+      </summary>
+      <div class="menu" id="oele"></div>
+    </details>
+
+    <details>
+      <summary>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="3" r="1" stroke-width="1.5"/>
+          <line x1="12" y1="4" x2="12" y2="6" stroke-width="1.5"/>
+          <path d="M10 6 L9 8 L9 18 C9 19.5 10 20 12 20 C14 20 15 19.5 15 18 L15 8 L14 6 Z"/>
+          <path d="M9.5 10 C9.5 10 10.5 11 12 11 C13.5 11 14.5 10 14.5 10" stroke-width="1" fill="none"/>
+          <ellipse cx="12" cy="14" rx="2.5" ry="4" fill="currentColor" opacity="0.15"/>
+        </svg>
+        Balsamico / Essig
+      </summary>
+      <div class="menu" id="bals"></div>
+    </details>
+
+    <details>
+      <summary>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="5" y="10" width="14" height="11" rx="1"/>
+          <path d="M5 10 L19 10 L19 13 L5 13 Z" fill="currentColor" opacity="0.1"/>
+          <line x1="12" y1="10" x2="12" y2="21" stroke-width="2"/>
+          <line x1="5" y1="13" x2="19" y2="13" stroke-width="1.5"/>
+          <path d="M12 10 L12 7 M12 7 C12 5 10 4 8 5 C7 5.5 7 7 8 7 L12 7 M12 7 C12 5 14 4 16 5 C17 5.5 17 7 16 7 L12 7" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Geschenkspackungen
+      </summary>
+      <div class="menu" id="gift"></div>
+    </details>
+
+    <details>
+      <summary>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12 L3 18 L9 18 L9 12 Z" stroke-width="1.5"/>
+          <circle cx="4.5" cy="14" r="0.5" fill="currentColor"/>
+          <circle cx="7" cy="15.5" r="0.5" fill="currentColor"/>
+          <circle cx="6" cy="16.5" r="0.5" fill="currentColor"/>
+          <circle cx="16" cy="5" r="1" stroke-width="1.5"/>
+          <line x1="16" y1="6" x2="16" y2="8" stroke-width="1.5"/>
+          <path d="M14.5 8 L14 10 L14 18 C14 19 15 19.5 16 19.5 C17 19.5 18 19 18 18 L18 10 L17.5 8 Z" stroke-width="1.5"/>
+          <ellipse cx="16" cy="13" rx="1.5" ry="3" fill="currentColor" opacity="0.2"/>
+        </svg>
+        Feinkost & Spezialitäten
+      </summary>
+      <div class="menu" id="feinkost"></div>
+    </details>
+
+    <details>
+      <summary>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="4" y="8" width="16" height="12" rx="1" stroke-width="2"/>
+          <path d="M4 11 L8 8 L16 8 L20 11" fill="none" stroke-width="1.5"/>
+          <line x1="8" y1="8" x2="8" y2="11" stroke-width="1.5"/>
+          <line x1="16" y1="8" x2="16" y2="11" stroke-width="1.5"/>
+          <rect x="7" y="12" width="2" height="6" rx="0.5" stroke-width="1"/>
+          <rect x="11" y="12" width="2" height="6" rx="0.5" stroke-width="1"/>
+          <rect x="15" y="12" width="2" height="6" rx="0.5" stroke-width="1"/>
+        </svg>
+        Kisten und Kartons
+      </summary>
+      <div class="menu" id="boxes"></div>
+    </details>
+
+    <details>
+      <summary>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="13" r="6"/>
+          <path d="M12 7 Q12 5, 13 4" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M13 4 Q14 3, 15 4 Q16 5, 15 6" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="12" cy="13" rx="5" ry="5" fill="currentColor" opacity="0.1"/>
+          <path d="M8 11 C8 11 9 13 11 13" stroke-width="1" fill="none" opacity="0.5"/>
+        </svg>
+        Bio-Früchte
+      </summary>
+      <div class="menu" id="fruits"></div>
+    </details>
     </section>
+      
 
     <section class="panel cart-panel">
       <div class="panel-header">
@@ -148,8 +183,12 @@
             <input id="customeraddress" type="text" placeholder="Straße, PLZ Ort">
           </div>
           <div class="input-group">
-            <label>Firmennummer</label>
-            <input id="companyid" type="tel" placeholder="UID/FN">
+            <label>Rechnungsnummer</label>
+            <input id="reciptid" type="tel" placeholder="00000000">
+          </div>
+          <div class="input-group">
+            <label>Infos</label>
+            <textarea id="info" type="text" placeholder="Hier ist platz für Zusatzinformationen"></textarea>
           </div>
         </div>
       </div>
@@ -195,7 +234,7 @@
   </main>
 
   <footer>
-    <small>© 2026 Colline degli Ulivi · Oil-UP System</small>
+    <small>Developer: <a href="https://breburda.at">Dejan Breburda</a></small>
   </footer>
 
 <script src="./app.js"></script>
