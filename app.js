@@ -3,15 +3,6 @@
  * Description:            An Application for writing checks and documenting outgoing products
  * Created:                30.01.2026             
  * Author:                 Breburda Dejan (https://breburda.at)
- * 
- * 
- * Arbeitszeiten:
- * 30.01.2026: 4h
- * 30.01.2026: 16:08 - 19:08
- * 05.02.2026: 19:03 - 21:21
- * 
- * 
- * 
  */ 
 
 const lblTotal = document.getElementById("lblTotal");
@@ -132,12 +123,16 @@ function chCartQty(productId, changeValue){
 
 function chDiscountQty(productId, changeValue){
     if (!discounts[productId]) return;
-    discounts[productId].qty += changeValue;
-    if (discounts[productId].qty === 0) delete discounts[productId];
 
+    discounts[productId].qty += changeValue;
+    
     if(cart[productId]){
         if(cart[productId].qty < discounts[productId].qty) cart[productId].qty = discounts[productId].qty;
     }
+    
+    if (discounts[productId].qty === 0) delete discounts[productId];
+
+    
 
     renderCart();
 }
@@ -195,7 +190,7 @@ function discountAmount(){
 
     for(const id in discounts){
         const {product,qty,price} = discounts[id];
-        discount += price*qty;
+        discount += price*qty * (1-global_discount);
     }
 
     return Math.round(discount * 100)/100;
@@ -320,7 +315,7 @@ function renderCart(){
     }
     lblSubTotal.textContent = euro(subtotal());
     for (const id in discounts) {
-        const { product, qty} = discounts[id];
+        const { product, qty,price} = discounts[id];
         const row = document.createElement("div");
         row.className = "item";
 
@@ -362,7 +357,7 @@ function renderCart(){
 
         const priceEl = document.createElement("div");
         priceEl.className = "price";
-        priceEl.textContent = euro(Number(product.price) * qty * -1);
+        priceEl.textContent = euro(price*qty* (1-global_discount));
 
         right.appendChild(controls);
         right.appendChild(priceEl);
