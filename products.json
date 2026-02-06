@@ -444,7 +444,7 @@
     "name": "Bio-Orangen",
     "variant": null,
     "size": "8kg",
-    "price": 0.0,
+    "price": 30.0,
     "category":"fruits"
   },
   {
@@ -452,7 +452,7 @@
     "name": "Bio-Clementinen",
     "variant": null,
     "size": "8kg",
-    "price": 0.0,
+    "price": 32.0,
     "category":"fruits"
   },
   {
@@ -460,15 +460,15 @@
     "name": "Bio-Zitronen",
     "variant": null,
     "size": "8kg",
-    "price": 0.0,
+    "price": 34.0,
     "category":"fruits"
   },
   {
-    "id": "FRUIT-BIO-BERGAMOTTE-8KG",
+    "id": "FRUIT-BIO-BERGAMOTTE-3KG",
     "name": "Bio-Bergamotten",
     "variant": null,
-    "size": "8kg",
-    "price": 0.0,
+    "size": "3kg",
+    "price": 16.0,
     "category":"fruits"
   },
   {
@@ -483,7 +483,7 @@
     "id": "KISTE-BALS-WEISS-500-6",
     "name": "6er Kiste Balsamico-Weiss",
     "variant": null,
-    "size": "12*500ml",
+    "size": "6*500ml",
     "price": 96.0,
     "category":"boxes"
   },
