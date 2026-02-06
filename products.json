@@ -249,7 +249,7 @@
   },
   {
     "id": "GIFT-A",
-    "name": "Geschenkspackung",
+    "name": "A Geschenkspackung",
     "variant": "5 Sorten",
     "size": null,
     "price": 28.0,
@@ -257,7 +257,7 @@
   },
   {
     "id": "GIFT-B",
-    "name": "Geschenkspackung",
+    "name": "B Geschenkspackung",
     "variant": "5 Sorten",
     "size": null,
     "price": 28.0,
@@ -265,7 +265,7 @@
   },
   {
     "id": "GIFT-C",
-    "name": "Geschenkspackung",
+    "name": "C Geschenkspackung",
     "variant": "3 Sorten",
     "size": null,
     "price": 17.0,
@@ -273,7 +273,7 @@
   },
   {
     "id": "GIFT-D",
-    "name": "Geschenkspackung",
+    "name": "D Geschenkspackung",
     "variant": "2 Sorten",
     "size": null,
     "price": 12.0,
@@ -281,7 +281,7 @@
   },
   {
     "id": "GIFT-E",
-    "name": "Geschenkspackung",
+    "name": "E Geschenkspackung",
     "variant": "3 Sorten",
     "size": null,
     "price": 32.0,
@@ -289,7 +289,7 @@
   },
   {
     "id": "GIFT-F",
-    "name": "Geschenkspackung",
+    "name": "F Geschenkspackung",
     "variant": "2 Sorten",
     "size": null,
     "price": 22.0,
@@ -297,7 +297,7 @@
   },
   {
     "id": "GIFT-G",
-    "name": "Geschenkspackung",
+    "name": "G Geschenkspackung",
     "variant": "2 Sorten",
     "size": null,
     "price": 15.0,
