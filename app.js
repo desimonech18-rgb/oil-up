@@ -202,6 +202,7 @@ function total(){
 
 function buildReceiptText() {
     let lines = [];
+    lines.push("Colline degli Ulivi")
     lines.push("Lieferschein");
     lines.push(`Datum: ${nowStamp()}`);
 
@@ -285,8 +286,8 @@ function renderCart(){
 
         const minus = document.createElement("button");
         minus.className = "qtyBtn";
-        minus.textContent = "–";
-        minus.onclick = () => chCartQty(id, -1);
+        minus.textContent = "+";
+        minus.onclick = () => chCartQty(id, 1);
 
         const qtyEl = document.createElement("div");
         qtyEl.className = "qty";
@@ -294,8 +295,8 @@ function renderCart(){
 
         const plus = document.createElement("button");
         plus.className = "qtyBtn";
-        plus.textContent = "+";
-        plus.onclick = () => chCartQty(id, 1);
+        plus.textContent = "-";
+        plus.onclick = () => chCartQty(id, -1);
 
         controls.appendChild(plus);
         controls.appendChild(qtyEl);
@@ -339,8 +340,8 @@ function renderCart(){
 
         const minus = document.createElement("button");
         minus.className = "qtyBtn";
-        minus.textContent = "–";
-        minus.onclick = () => chDiscountQty(id, -1);
+        minus.textContent = "+";
+        minus.onclick = () => chDiscountQty(id, 1);
 
         const qtyEl = document.createElement("div");
         qtyEl.className = "qty";
@@ -348,8 +349,8 @@ function renderCart(){
 
         const plus = document.createElement("button");
         plus.className = "qtyBtn";
-        plus.textContent = "+";
-        plus.onclick = () => chDiscountQty(id, 1);
+        plus.textContent = "-";
+        plus.onclick = () => chDiscountQty(id, -1);
 
         controls.appendChild(plus);
         controls.appendChild(qtyEl);

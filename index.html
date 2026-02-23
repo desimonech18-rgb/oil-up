@@ -166,6 +166,39 @@
           <span class="summary-label">Summe</span>
           <span id="lblTotal" class="summary-value">0,00 €</span>
         </div>
+
+        <!-- Bargeld eingeben -->
+        <div class="summary-row cash-row">
+          <span class="summary-label">
+            <svg style="width:16px;height:16px;vertical-align:middle;margin-right:4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="6" width="20" height="12" rx="2"/>
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M6 12h.01M18 12h.01"/>
+            </svg>
+            Gegeben Bar
+          </span>
+          <input
+            id="given-money"
+            class="cash-input"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0,00"
+          />
+        </div>
+
+        <!-- Rückgeld -->
+        <div class="summary-row change-row" id="changeRow">
+          <span class="summary-label">
+            <svg style="width:16px;height:16px;vertical-align:middle;margin-right:4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10"/>
+              <polyline points="1 20 1 14 7 14"/>
+              <path d="M3.51 9a9 9 0 0 1 14.36-3.36L23 10M1 14l5.13 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+            Rückgeld
+          </span>
+          <span id="lblChange" class="summary-value">0,00 €</span>
+        </div>
       </div>
 
       <div class="customer-info">
@@ -188,7 +221,7 @@
           </div>
           <div class="input-group">
             <label>Infos</label>
-            <textarea id="info" type="text" placeholder="Hier ist platz für Zusatzinformationen"></textarea>
+            <textarea id="info" placeholder="Hier ist platz für Zusatzinformationen"></textarea>
           </div>
         </div>
       </div>
@@ -238,5 +271,53 @@
   </footer>
 
 <script src="./app.js"></script>
+
+<!-- Rückgeld-Logik: läuft nach app.js und ergänzt die bestehende Summen-Logik -->
+<script>
+(function () {
+  const givenInput = document.getElementById('given-money');
+  const lblChange  = document.getElementById('lblChange');
+  const changeRow  = document.getElementById('changeRow');
+  const lblTotal   = document.getElementById('lblTotal');
+
+  /**
+   * Liest den aktuellen Gesamtbetrag aus dem DOM-Element #lblTotal.
+   * Erwartet Format "12,34 €" oder "12.34 €".
+   */
+  function getTotalFromDOM() {
+    const raw = lblTotal.textContent.replace(/[€\s]/g, '').replace(',', '.');
+    return parseFloat(raw) || 0;
+  }
+
+  function formatEuro(value) {
+    return value.toLocaleString('de-AT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  function updateChange() {
+    const total = getTotalFromDOM();
+    const given = parseFloat(givenInput.value) || 0;
+    const change = given - total;
+
+    lblChange.textContent = formatEuro(Math.abs(change));
+    lblChange.classList.remove('change-animate');
+    void lblChange.offsetWidth; // reflow für animation restart
+    lblChange.classList.add('change-animate');
+
+    if (change < 0) {
+      changeRow.classList.add('change-negative');
+      lblChange.textContent = '– ' + formatEuro(Math.abs(change));
+    } else {
+      changeRow.classList.remove('change-negative');
+    }
+  }
+
+  // Auf Eingabe reagieren
+  givenInput.addEventListener('input', updateChange);
+
+  // Wenn app.js die Summe ändert (MutationObserver auf #lblTotal)
+  const observer = new MutationObserver(updateChange);
+  observer.observe(lblTotal, { childList: true, subtree: true, characterData: true });
+})();
+</script>
 </body>
 </html>
