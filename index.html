@@ -188,7 +188,7 @@
         </div>
 
         <!-- Rückgeld -->
-        <div class="summary-row change-row" id="changeRow">
+        <div class="summary-row change-row hidden" id="changeRow">
           <span class="summary-label">
             <svg style="width:16px;height:16px;vertical-align:middle;margin-right:4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="23 4 23 10 17 10"/>
@@ -303,10 +303,15 @@
     void lblChange.offsetWidth; // reflow für animation restart
     lblChange.classList.add('change-animate');
 
-    if (change < 0) {
+    if(given === 0){
+      changeRow.classList.add('hidden');
+    }
+    else if (change < 0) {
+      changeRow.classList.remove('hidden');
       changeRow.classList.add('change-negative');
       lblChange.textContent = '– ' + formatEuro(Math.abs(change));
     } else {
+      changeRow.classList.remove('hidden');
       changeRow.classList.remove('change-negative');
     }
   }
