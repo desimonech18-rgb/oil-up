@@ -668,8 +668,17 @@ footer small {
   display: none !important;
 }
 
+ .scanner_section {
+    display: none;
+ }
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
+
+  .scanner_section {
+    display: block;
+  }
+
   header {
     padding: 1rem 1.5rem;
   }

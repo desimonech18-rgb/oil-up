@@ -17,6 +17,8 @@ const btnWhatsapp = document.getElementById("btnWhatsapp");
 const btnFreeItem = document.getElementById("btnFreeItem");
 const divCart = document.getElementById("divCart");
 const divDiscounts = document.getElementById("divDiscounts");
+const givenInput = document.getElementById('given-money');
+const changeRow  = document.getElementById('changeRow');
 
 const customername = document.getElementById("customername");
 const customernumber = document.getElementById("customernumber");
@@ -36,6 +38,8 @@ btnClearCart.onclick = () =>{
     customeraddress.value = "";
     recipt.value = "";
     info.value = "";
+    givenInput.value = "";
+    changeRow.classList.add('hidden');
     renderCart();
 }
 

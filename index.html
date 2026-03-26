@@ -23,7 +23,7 @@
   </header>
 
   <main>
-    <section class="panel camera-panel">
+    <section class="panel camera-panel scanner_section">
       <div class="panel-header">
         <h2>Scanner</h2>
       </div>
@@ -270,8 +270,6 @@
     <small>Developer: <a href="https://breburda.at">Dejan Breburda</a></small>
   </footer>
 
-<script src="./app.js"></script>
-
 <!-- Rückgeld-Logik: läuft nach app.js und ergänzt die bestehende Summen-Logik -->
 <script>
 (function () {
@@ -324,5 +322,6 @@
   observer.observe(lblTotal, { childList: true, subtree: true, characterData: true });
 })();
 </script>
+<script src="./app.js"></script>
 </body>
 </html>
