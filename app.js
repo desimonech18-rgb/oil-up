@@ -244,6 +244,13 @@ function buildReceiptText() {
             lines.push(`Abzug: -${euro(discountAmount())}`);
     }
     lines.push(`SUMME: ${euro(total())}`);
+    const given = parseFloat(givenInput.value) || 0;
+    if (given != 0) {
+        lines.push("----------------------------------------------------------------");
+        lines.push("Bargeld gegeben: "+euro(given));
+        lines.push("");
+        lines.push("RÜCKGELD: "+euro(Number(given - total())));
+    }
     return lines.join("\n");
 }
 
