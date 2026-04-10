@@ -11,7 +11,8 @@ const lblDiscount = document.getElementById("lblDiscount");
 const lblReciptText = document.getElementById("lblReciptText")
 const btnOpenCam = document.getElementById("btnOpenCam");
 const btnClearCart = document.getElementById("btnClearCart");
-const btnDiscount = document.getElementById("btnDiscount");
+const btnDiscountZ = document.getElementById("btnDiscountZ");
+const btnDiscountF = document.getElementById("btnDiscountF");
 const btnPDF = document.getElementById("btnPDF");
 const btnWhatsapp = document.getElementById("btnWhatsapp");
 const btnFreeItem = document.getElementById("btnFreeItem");
@@ -43,8 +44,13 @@ btnClearCart.onclick = () =>{
     renderCart();
 }
 
-btnDiscount.onclick = () => {
-  global_discount = global_discount > 0 ? 0 : 0.10;
+btnDiscountZ.onclick = () => {
+  global_discount = global_discount === 0.1 ? 0 : 0.1;
+  renderCart();
+};
+
+btnDiscountF.onclick = () => {
+  global_discount = global_discount === 0.15 ? 0 : 0.15;
   renderCart();
 };
 
@@ -243,7 +249,8 @@ function buildReceiptText() {
             lines.push("");
             lines.push(`Abzug: -${euro(discountAmount())}`);
     }
-    lines.push(`SUMME: ${euro(total())}`);
+    const overrideVal = parseFloat(lblTotal.dataset.override);
+    lines.push(`SUMME: ${euro(isNaN(overrideVal) ? total() : overrideVal)}`);
     const given = parseFloat(givenInput.value) || 0;
     if (given != 0) {
         lines.push("----------------------------------------------------------------");
@@ -266,9 +273,11 @@ function renderCart(){
         lblTotal.textContent = euro(0);
         btnPDF.disabled = true;
         btnWhatsapp.disabled = true;
-        btnDiscount.disabled = true;
+        btnDiscountZ.disabled = true;
+        btnDiscountF.disabled = true;
         btnFreeItem.disabled = true;
-        btnDiscount.classList.remove("toggleOn");
+        btnDiscountZ.classList.remove("toggleOn");
+        btnDiscountF.classList.remove("toggleOn");
         return;
     }
 
@@ -379,16 +388,32 @@ function renderCart(){
         divDiscounts.appendChild(row);
     }
     lblDiscount.textContent = euro(discountAmount());
-    lblTotal.textContent = euro(total());
+
+    const override = parseFloat(lblTotal.dataset.override);
+    lblTotal.textContent = euro(isNaN(override) ? total() : override);
+    // since lblTotal is now an input:
+    lblTotal.value = euro(isNaN(override) ? total() : override);
+    lblTotal.dataset.calc = total(); // store calculated value for Escape key
 
     btnPDF.disabled = false;
     btnWhatsapp.disabled = false;
-    btnDiscount.disabled = false;
+    btnDiscountZ.disabled = false;
+    btnDiscountF.disabled = false;
     btnFreeItem.disabled = false;
 
-    if (global_discount > 0) btnDiscount.classList.add("toggleOn");
-    else btnDiscount.classList.remove("toggleOn");
-
+    if (global_discount === 0.1){
+        btnDiscountZ.classList.add("toggleOn");
+        btnDiscountF.classList.remove("toggleOn");
+    }
+    else if (global_discount === 0.15){
+        btnDiscountZ.classList.remove("toggleOn");
+        btnDiscountF.classList.add("toggleOn");
+    }
+    else {
+        btnDiscountZ.classList.remove("toggleOn");
+        btnDiscountF.classList.remove("toggleOn");
+    }
+    
     lblReciptText.value = buildReceiptText();
 }
 

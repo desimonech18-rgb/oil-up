@@ -164,7 +164,7 @@
         
         <div class="summary-row total-row">
           <span class="summary-label">Summe</span>
-          <span id="lblTotal" class="summary-value">0,00 €</span>
+          <input id="lblTotal" class="summary-value total-editable" value="0,00 €" readonly />
         </div>
 
         <!-- Bargeld eingeben -->
@@ -228,13 +228,21 @@
 
       <div class="action-buttons">
         <div class="discount-buttons">
-          <button id="btnDiscount" class="btn-secondary" disabled>
+          <button id="btnDiscountZ" class="btn-secondary" disabled>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"/>
               <line x1="12" y1="8" x2="12" y2="16"/>
               <line x1="8" y1="12" x2="16" y2="12"/>
             </svg>
-            10% Rabatt gesamt
+            Z
+          </button>
+          <button id="btnDiscountF" class="btn-secondary" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="16"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+            F
           </button>
           <button id="btnFreeItem" class="btn-secondary" disabled>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -278,12 +286,8 @@
   const changeRow  = document.getElementById('changeRow');
   const lblTotal   = document.getElementById('lblTotal');
 
-  /**
-   * Liest den aktuellen Gesamtbetrag aus dem DOM-Element #lblTotal.
-   * Erwartet Format "12,34 €" oder "12.34 €".
-   */
   function getTotalFromDOM() {
-    const raw = lblTotal.textContent.replace(/[€\s]/g, '').replace(',', '.');
+    const raw = (lblTotal.value || lblTotal.textContent || '0').replace(/[€\s]/g, '').replace(',', '.');
     return parseFloat(raw) || 0;
   }
 
@@ -295,16 +299,13 @@
     const total = getTotalFromDOM();
     const given = parseFloat(givenInput.value) || 0;
     const change = given - total;
-
     lblChange.textContent = formatEuro(Math.abs(change));
     lblChange.classList.remove('change-animate');
-    void lblChange.offsetWidth; // reflow für animation restart
+    void lblChange.offsetWidth;
     lblChange.classList.add('change-animate');
-
-    if(given === 0){
+    if (given === 0) {
       changeRow.classList.add('hidden');
-    }
-    else if (change < 0) {
+    } else if (change < 0) {
       changeRow.classList.remove('hidden');
       changeRow.classList.add('change-negative');
       lblChange.textContent = '– ' + formatEuro(Math.abs(change));
@@ -314,12 +315,48 @@
     }
   }
 
-  // Auf Eingabe reagieren
+  // Make total editable on click
+  lblTotal.addEventListener('click', function () {
+    if (!this.readOnly) return;
+    this.readOnly = false;
+    const raw = (this.value || '').replace(/[€\s]/g, '').replace(',', '.');
+    this.value = raw;
+    this.select();
+  });
+
+  lblTotal.addEventListener('blur', function () {
+    const raw = parseFloat(this.value.replace(',', '.'));
+    this.readOnly = true;
+    if (!isNaN(raw)) {
+      this.dataset.override = raw;
+      this.value = formatEuro(raw);
+    } else {
+      delete this.dataset.override;
+      // restore calculated value
+      const calcRaw = this.dataset.calc ? parseFloat(this.dataset.calc) : 0;
+      this.value = formatEuro(calcRaw);
+    }
+    updateChange();
+  });
+
+  lblTotal.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') this.blur();
+    if (e.key === 'Escape') {
+      delete this.dataset.override;
+      this.readOnly = true;
+      const calcRaw = this.dataset.calc ? parseFloat(this.dataset.calc) : 0;
+      this.value = formatEuro(calcRaw);
+      updateChange();
+    }
+  });
+
   givenInput.addEventListener('input', updateChange);
 
-  // Wenn app.js die Summe ändert (MutationObserver auf #lblTotal)
   const observer = new MutationObserver(updateChange);
-  observer.observe(lblTotal, { childList: true, subtree: true, characterData: true });
+  observer.observe(lblTotal, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['value'] });
+
+  // Also observe value changes (input element doesn't fire MutationObserver on value)
+  lblTotal.addEventListener('input', updateChange);
 })();
 </script>
 <script src="./app.js"></script>
