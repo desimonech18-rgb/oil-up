@@ -84,7 +84,19 @@ btnPDF.onclick = () => {
   doc.text(lines, margin, 72);
 
   const fileName = `Colline_Rechnung_${new Date().toISOString().slice(0, 10)}.pdf`;
-  doc.save(fileName);
+const pdfBlob = doc.output("blob");
+const url = URL.createObjectURL(pdfBlob);
+
+const iframe = document.createElement("iframe");
+iframe.style.display = "none";
+iframe.src = url;
+
+document.body.appendChild(iframe);
+
+iframe.onload = function () {
+  iframe.contentWindow.focus();
+  iframe.contentWindow.print();
+};
 };
 
 btnFreeItem.onclick = () => {
