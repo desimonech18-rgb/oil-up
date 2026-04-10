@@ -35,13 +35,6 @@
           </svg>
           Kamera starten
         </button>
-        <button id="btnClearCart" class="btn-danger">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="3 6 5 6 21 6"/>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-          </svg>
-          Neu
-        </button>
       </div>
       <div id="readerWrap">
         <div id="reader"></div>
@@ -146,6 +139,13 @@
     <section class="panel cart-panel">
       <div class="panel-header">
         <h2>Warenkorb</h2>
+        <button id="btnClearCart" class="btn-danger btn-clear-cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+          Leeren
+        </button>
       </div>
       <div id="divCart" class="cart-items"></div>
       
@@ -163,8 +163,25 @@
         </div>
         
         <div class="summary-row total-row">
-          <span class="summary-label">Summe</span>
-          <input id="lblTotal" class="summary-value total-editable" value="0,00 €" readonly />
+          <span class="summary-label">
+            Summe
+            <span class="total-hint">Tippen zum Ändern</span>
+          </span>
+          <div class="total-input-wrap">
+            <input
+              id="lblTotal"
+              class="summary-value total-editable"
+              value="0,00 €"
+              readonly
+              inputmode="decimal"
+            />
+            <button id="btnClearOverride" class="btn-clear-override hidden" title="Berechneten Wert wiederherstellen">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Bargeld eingeben -->
@@ -278,31 +295,32 @@
     <small>Developer: <a href="https://breburda.at">Dejan Breburda</a></small>
   </footer>
 
-<!-- Rückgeld-Logik: läuft nach app.js und ergänzt die bestehende Summen-Logik -->
 <script>
 (function () {
-  const givenInput = document.getElementById('given-money');
-  const lblChange  = document.getElementById('lblChange');
-  const changeRow  = document.getElementById('changeRow');
-  const lblTotal   = document.getElementById('lblTotal');
-
-  function getTotalFromDOM() {
-    const raw = (lblTotal.value || lblTotal.textContent || '0').replace(/[€\s]/g, '').replace(',', '.');
-    return parseFloat(raw) || 0;
-  }
+  const givenInput      = document.getElementById('given-money');
+  const lblChange       = document.getElementById('lblChange');
+  const changeRow       = document.getElementById('changeRow');
+  const lblTotal        = document.getElementById('lblTotal');
+  const btnClearOverride = document.getElementById('btnClearOverride');
 
   function formatEuro(value) {
     return value.toLocaleString('de-AT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
   }
 
+  function getTotalFromInput() {
+    const raw = (lblTotal.value || '0').replace(/[€\s]/g, '').replace(',', '.');
+    return parseFloat(raw) || 0;
+  }
+
   function updateChange() {
-    const total = getTotalFromDOM();
+    const total = getTotalFromInput();
     const given = parseFloat(givenInput.value) || 0;
     const change = given - total;
-    lblChange.textContent = formatEuro(Math.abs(change));
+
     lblChange.classList.remove('change-animate');
     void lblChange.offsetWidth;
     lblChange.classList.add('change-animate');
+
     if (given === 0) {
       changeRow.classList.add('hidden');
     } else if (change < 0) {
@@ -312,51 +330,63 @@
     } else {
       changeRow.classList.remove('hidden');
       changeRow.classList.remove('change-negative');
+      lblChange.textContent = formatEuro(change);
     }
   }
 
-  // Make total editable on click
+  // Click → make editable
   lblTotal.addEventListener('click', function () {
     if (!this.readOnly) return;
     this.readOnly = false;
+    this.classList.add('total-editable--active');
     const raw = (this.value || '').replace(/[€\s]/g, '').replace(',', '.');
-    this.value = raw;
+    this.value = raw === '0.00' || raw === '0' ? '' : raw;
     this.select();
   });
 
+  // Confirm on blur
   lblTotal.addEventListener('blur', function () {
-    const raw = parseFloat(this.value.replace(',', '.'));
     this.readOnly = true;
-    if (!isNaN(raw)) {
+    this.classList.remove('total-editable--active');
+    const raw = parseFloat((this.value || '').replace(',', '.'));
+    const calc = parseFloat(this.dataset.calc) || 0;
+
+    if (!isNaN(raw) && raw !== calc) {
       this.dataset.override = raw;
       this.value = formatEuro(raw);
+      btnClearOverride.classList.remove('hidden');
     } else {
       delete this.dataset.override;
-      // restore calculated value
-      const calcRaw = this.dataset.calc ? parseFloat(this.dataset.calc) : 0;
-      this.value = formatEuro(calcRaw);
+      this.value = formatEuro(calc);
+      btnClearOverride.classList.add('hidden');
     }
     updateChange();
   });
 
+  // Enter confirms, Escape cancels
   lblTotal.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') this.blur();
+    if (e.key === 'Enter') { e.preventDefault(); this.blur(); }
     if (e.key === 'Escape') {
       delete this.dataset.override;
       this.readOnly = true;
-      const calcRaw = this.dataset.calc ? parseFloat(this.dataset.calc) : 0;
-      this.value = formatEuro(calcRaw);
+      this.classList.remove('total-editable--active');
+      const calc = parseFloat(this.dataset.calc) || 0;
+      this.value = formatEuro(calc);
+      btnClearOverride.classList.add('hidden');
       updateChange();
     }
   });
 
+  // Clear override button
+  btnClearOverride.addEventListener('click', function () {
+    delete lblTotal.dataset.override;
+    const calc = parseFloat(lblTotal.dataset.calc) || 0;
+    lblTotal.value = formatEuro(calc);
+    this.classList.add('hidden');
+    updateChange();
+  });
+
   givenInput.addEventListener('input', updateChange);
-
-  const observer = new MutationObserver(updateChange);
-  observer.observe(lblTotal, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['value'] });
-
-  // Also observe value changes (input element doesn't fire MutationObserver on value)
-  lblTotal.addEventListener('input', updateChange);
 })();
 </script>
 <script src="./app.js"></script>

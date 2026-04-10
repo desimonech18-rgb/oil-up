@@ -11,6 +11,7 @@ const lblDiscount = document.getElementById("lblDiscount");
 const lblReciptText = document.getElementById("lblReciptText")
 const btnOpenCam = document.getElementById("btnOpenCam");
 const btnClearCart = document.getElementById("btnClearCart");
+const btnClearOverride = document.getElementById('btnClearOverride');
 const btnDiscountZ = document.getElementById("btnDiscountZ");
 const btnDiscountF = document.getElementById("btnDiscountF");
 const btnPDF = document.getElementById("btnPDF");
@@ -20,6 +21,7 @@ const divCart = document.getElementById("divCart");
 const divDiscounts = document.getElementById("divDiscounts");
 const givenInput = document.getElementById('given-money');
 const changeRow  = document.getElementById('changeRow');
+
 
 const customername = document.getElementById("customername");
 const customernumber = document.getElementById("customernumber");
@@ -34,6 +36,7 @@ btnClearCart.onclick = () =>{
     discounts = {};
     global_discount = 0;
     lblReciptText.classList.add("hidden");
+    btnClearOverride.classList.add("hidden");
     customername.value = "";
     customernumber.value = "";
     customeraddress.value = "";
@@ -41,6 +44,8 @@ btnClearCart.onclick = () =>{
     info.value = "";
     givenInput.value = "";
     changeRow.classList.add('hidden');
+    // clear total override
+    delete lblTotal.dataset.override;
     renderCart();
 }
 
@@ -142,8 +147,6 @@ function chDiscountQty(productId, changeValue){
     
     if (discounts[productId].qty === 0) delete discounts[productId];
 
-    
-
     renderCart();
 }
 
@@ -210,6 +213,11 @@ function total(){
     return Math.round((subtotal() - discountAmount()) * 100) / 100;
 }
 
+function getEffectiveTotal() {
+  const override = parseFloat(lblTotal.dataset.override);
+  return isNaN(override) ? total() : override;
+}
+
 function buildReceiptText() {
     let lines = [];
     lines.push("Colline degli Ulivi")
@@ -249,14 +257,14 @@ function buildReceiptText() {
             lines.push("");
             lines.push(`Abzug: -${euro(discountAmount())}`);
     }
-    const overrideVal = parseFloat(lblTotal.dataset.override);
-    lines.push(`SUMME: ${euro(isNaN(overrideVal) ? total() : overrideVal)}`);
+    const effectiveTotal = getEffectiveTotal();
+    lines.push(`SUMME: ${euro(effectiveTotal)}`);
     const given = parseFloat(givenInput.value) || 0;
     if (given != 0) {
         lines.push("----------------------------------------------------------------");
         lines.push("Bargeld gegeben: "+euro(given));
         lines.push("");
-        lines.push("RÜCKGELD: "+euro(Number(given - total())));
+        lines.push("RÜCKGELD: "+euro(Number(given - effectiveTotal)));
     }
     return lines.join("\n");
 }
@@ -270,7 +278,12 @@ function renderCart(){
         divCart.innerHTML = "<p style='color:#666;margin:0'></p>";
         lblSubTotal.textContent = euro(0);
         lblDiscount.textContent = euro(0);
-        lblTotal.textContent = euro(0);
+        // reset total input
+        delete lblTotal.dataset.override;
+        lblTotal.dataset.calc = 0;
+        lblTotal.value = euro(0);
+        lblTotal.readOnly = true;
+        lblTotal.classList.remove('total-editable--active');
         btnPDF.disabled = true;
         btnWhatsapp.disabled = true;
         btnDiscountZ.disabled = true;
@@ -389,11 +402,14 @@ function renderCart(){
     }
     lblDiscount.textContent = euro(discountAmount());
 
+    // Update total input — keep override if set, otherwise use calculated
+    const calcTotal = total();
+    lblTotal.dataset.calc = calcTotal;
     const override = parseFloat(lblTotal.dataset.override);
-    lblTotal.textContent = euro(isNaN(override) ? total() : override);
-    // since lblTotal is now an input:
-    lblTotal.value = euro(isNaN(override) ? total() : override);
-    lblTotal.dataset.calc = total(); // store calculated value for Escape key
+    const displayTotal = isNaN(override) ? calcTotal : override;
+    lblTotal.value = euro(displayTotal);
+
+    lblReciptText.value = buildReceiptText();
 
     btnPDF.disabled = false;
     btnWhatsapp.disabled = false;
