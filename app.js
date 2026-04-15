@@ -14,7 +14,8 @@ const btnClearCart = document.getElementById("btnClearCart");
 const btnClearOverride = document.getElementById('btnClearOverride');
 const btnDiscountZ = document.getElementById("btnDiscountZ");
 const btnDiscountF = document.getElementById("btnDiscountF");
-const btnPDF = document.getElementById("btnPDF");
+const btnSavePDF = document.getElementById("btnSavePDF");
+const btnPrintPDF = document.getElementById("btnPrintPDF");
 const btnWhatsapp = document.getElementById("btnWhatsapp");
 const btnFreeItem = document.getElementById("btnFreeItem");
 const divCart = document.getElementById("divCart");
@@ -70,8 +71,55 @@ btnWhatsapp.onclick = async () => {
   }
 };
 
-btnPDF.onclick = () => {
+/**
+ * Build a jsPDF document from the current receipt text.
+ * Returns the jsPDF instance so callers can choose what to do with it.
+ */
+function buildPDFDoc() {
   const text = buildReceiptText();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+
+  const margin = 48;
+  const maxWidth = 595 - margin * 2;
+  const lines = doc.splitTextToSize(text, maxWidth);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.text(lines, margin, 72);
+
+  return doc;
+}
+
+function pdfFileName() {
+  return `Colline_Rechnung_${new Date().toISOString().slice(0, 10)}.pdf`;
+}
+
+/* ── Save PDF (download) ── */
+btnSavePDF.onclick = () => {
+  const doc = buildPDFDoc();
+  const pdfBlob = doc.output("blob");
+  const url = URL.createObjectURL(pdfBlob);
+
+  // Use an <a> link with download attribute.
+  // On iOS Safari this opens the PDF in-browser where the user can share/save.
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = pdfFileName();
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+
+  // Clean up after a short delay
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 500);
+};
+
+/* ── Print PDF ── */
+btnPrintPDF.onclick = () => {
+ const text = buildReceiptText();
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "pt", format: "a4" });
 
@@ -296,7 +344,8 @@ function renderCart(){
         lblTotal.value = euro(0);
         lblTotal.readOnly = true;
         lblTotal.classList.remove('total-editable--active');
-        btnPDF.disabled = true;
+        btnSavePDF.disabled = true;
+        btnPrintPDF.disabled = true;
         btnWhatsapp.disabled = true;
         btnDiscountZ.disabled = true;
         btnDiscountF.disabled = true;
@@ -423,7 +472,8 @@ function renderCart(){
 
     lblReciptText.value = buildReceiptText();
 
-    btnPDF.disabled = false;
+    btnSavePDF.disabled = false;
+    btnPrintPDF.disabled = false;
     btnWhatsapp.disabled = false;
     btnDiscountZ.disabled = false;
     btnDiscountF.disabled = false;
