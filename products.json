@@ -308,7 +308,7 @@
     "name": "Bio Balsamico",
     "variant": "Silver 6 Jahre",
     "size": "250 ml",
-    "price": 20.0,
+    "price": 22.0,
     "category":"bals"
   },
   {
@@ -324,7 +324,7 @@
     "name": "Bio Balsamico",
     "variant": "Gold 10 Jahre",
     "size": "250 ml",
-    "price": 29.0,
+    "price": 32.0,
     "category":"bals"
   },
   {
@@ -348,7 +348,7 @@
     "name": "Bio Balsamico",
     "variant": "Weiss",
     "size": "500 ml",
-    "price": 16.0,
+    "price": 17.0,
     "category":"bals"
   },
   {
@@ -356,7 +356,7 @@
     "name": "Bio Balsamico",
     "variant": "Balsam Crema",
     "size": "250 ml",
-    "price": 11.0,
+    "price": 12.0,
     "category":"bals"
   },
   {
@@ -364,7 +364,7 @@
     "name": "Bio Balsamico",
     "variant": "Most (Saba)",
     "size": "250 ml",
-    "price": 11.0,
+    "price": 12.0,
     "category":"bals"
   },
   {
@@ -372,7 +372,7 @@
     "name": "Bio Balsamico",
     "variant": "Most (Saba)",
     "size": "500 ml",
-    "price": 17.0,
+    "price": 18.0,
     "category":"bals"
   },
   {
@@ -380,7 +380,7 @@
     "name": "Bio Balsamico",
     "variant": "Extra 25 Jahre",
     "size": "100 ml",
-    "price": 95.0,
+    "price": 110.0,
     "category":"bals"
   },
   {
@@ -484,7 +484,7 @@
     "name": "6er Kiste Balsamico-Weiss",
     "variant": null,
     "size": "6*500ml",
-    "price": 96.0,
+    "price": 102.0,
     "category":"boxes"
   },
   {
