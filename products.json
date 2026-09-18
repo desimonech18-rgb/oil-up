@@ -444,7 +444,7 @@
     "name": "Bio-Orangen",
     "variant": null,
     "size": "8kg",
-    "price": 30.0,
+    "price": 28.0,
     "category":"fruits"
   },
   {
@@ -452,7 +452,7 @@
     "name": "Bio-Clementinen",
     "variant": null,
     "size": "8kg",
-    "price": 32.0,
+    "price": 30.0,
     "category":"fruits"
   },
   {
@@ -460,7 +460,7 @@
     "name": "Bio-Zitronen",
     "variant": null,
     "size": "8kg",
-    "price": 34.0,
+    "price": 32.0,
     "category":"fruits"
   },
   {
@@ -468,7 +468,7 @@
     "name": "Bio-Bergamotten",
     "variant": null,
     "size": "3kg",
-    "price": 16.0,
+    "price": 15.0,
     "category":"fruits"
   },
   {
